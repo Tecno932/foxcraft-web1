@@ -1,26 +1,145 @@
 @import "tailwindcss";
 
+/* =========================================================
+   FOXCRAFT DESIGN TOKENS
+========================================================= */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Backgrounds */
+  --background: #09090b;
+  --foreground: #fafafa;
+
+  --surface: #111217;
+  --surface-secondary: #18181d;
+  --surface-tertiary: #202127;
+
+  /* Brand */
+  --primary: #f97316;
+  --primary-hover: #fb923c;
+
+  --secondary: #06b6d4;
+
+  /* UI */
+  --border: #2a2b31;
+  --border-hover: #3a3b44;
+
+  --muted: #a1a1aa;
+  --muted-foreground: #71717a;
+
+  /* Feedback */
+  --success: #22c55e;
+  --warning: #eab308;
+  --danger: #ef4444;
+
+  /* Effects */
+  --ring: rgba(249, 115, 22, 0.35);
+
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 22px;
 }
+
+/* =========================================================
+   TAILWIND TOKENS
+========================================================= */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-surface: var(--surface);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-tertiary: var(--surface-tertiary);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+
+  --color-secondary: var(--secondary);
+
+  --color-border: var(--border);
+  --color-border-hover: var(--border-hover);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+
+  --radius-sm: var(--radius-sm);
+  --radius: var(--radius);
+  --radius-lg: var(--radius-lg);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* =========================================================
+   BASE
+========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
+  min-height: 100vh;
+
+  background:
+    radial-gradient(circle at top, rgba(249, 115, 22, 0.08), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(6, 182, 212, 0.05), transparent 30%),
+    var(--background);
+
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+  font-family: var(--font-geist-sans);
+
+  text-rendering: optimizeLegibility;
+
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--primary);
+  color: white;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+  width: 11px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d0d10;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #303038;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #45454f;
 }
