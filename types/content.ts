@@ -1,3 +1,5 @@
+// types/content.ts
+
 export type ContentCategory =
   | "mods"
   | "maps"
@@ -11,8 +13,6 @@ export type ContentCategory =
   | "schematics-java"
   | "schematics-bedrock";
 
-export type ContentType = ContentCategory;
-
 export type ContentPlatform =
   | "java"
   | "bedrock"
@@ -25,19 +25,36 @@ export type ContentEdition =
 
 export interface ContentItem {
   id: number;
+
+  category?: ContentCategory;
+
   slug: string;
+
   title: string;
+
   description: string;
+
   image: string;
+
+  author?: string;
+
   version: string[];
-  platform: string;
+
+  platform: ContentPlatform;
+
+  edition?: ContentEdition[];
+
   featured: boolean;
+
   downloads: number;
+
   download: string;
+
   createdAt: string;
 }
 
-export interface SchematicItem extends ContentItem {
+export interface SchematicItem
+  extends ContentItem {
   category:
     | "schematics-java"
     | "schematics-bedrock";

@@ -13,6 +13,11 @@ import {
   ContentGrid,
 } from "@/components/catalog";
 
+import type {
+  ContentItem,
+  SkinItem,
+} from "@/types";
+
 import {
   SkinGrid,
   SkinPagination,
@@ -23,22 +28,27 @@ interface CategoryPageProps {
     category: string;
   }>;
 
-  searchParams: Promise<{
+  searchParams?: Promise<{
     page?: string;
   }>;
 }
 
 const ITEMS_PER_PAGE = 25;
 
+function isSkinItem(
+  item: ContentItem,
+): item is SkinItem {
+  return item.category === "skins";
+}
+
 export default async function CategoryPage({
   params,
   searchParams,
 }: CategoryPageProps) {
-  const { category } =
-    await params;
+  const { category } = await params;
 
   const { page } =
-    await searchParams;
+    (await searchParams) ?? {};
 
   const items =
     ContentRepository.getByCategory(
@@ -100,9 +110,7 @@ export default async function CategoryPage({
             {category === "skins" ? (
               <>
                 <SkinGrid
-                  items={
-                    paginatedItems as any
-                  }
+                  items={paginatedItems.filter(isSkinItem)}
                 />
 
                 <SkinPagination
@@ -116,7 +124,9 @@ export default async function CategoryPage({
               </>
             ) : (
               <ContentGrid
-                items={paginatedItems}
+                items={
+                  paginatedItems
+                }
               />
             )}
           </div>

@@ -1,85 +1,141 @@
+import {
+  Calendar,
+  Download,
+  Gamepad2,
+  User,
+} from "lucide-react";
+
 import type {
-ContentItem
+  ContentItem,
 } from "@/types";
 
-
-interface Props{
-item:ContentItem;
+interface Props {
+  item: ContentItem;
 }
 
+function formatDate(
+  date: string,
+) {
+  const parsed =
+    new Date(date);
+
+  if (Number.isNaN(
+    parsed.getTime(),
+  )) {
+    return date;
+  }
+
+  return parsed.toLocaleDateString(
+    "es-AR",
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    },
+  );
+}
 
 export function ContentInfo({
-item
-}:Props){
+  item,
+}: Props) {
+  return (
+    <div
+      className="
+        grid
+        gap-4
+        sm:grid-cols-2
+        lg:grid-cols-4
+      "
+    >
 
-return(
+      {/* Autor */}
+      <InfoItem
+        icon={<User size={18} />}
+        label="Autor"
+        value={
+          item.author ??
+          "FoxCraft"
+        }
+      />
 
-<div
-className="
-grid
-gap-4
-sm:grid-cols-2
-"
->
+      {/* Versión */}
+      <InfoItem
+        icon={<Gamepad2 size={18} />}
+        label="Minecraft"
+        value={
+          item.version.length > 0
+            ? item.version.join(", ")
+            : "Sin especificar"
+        }
+      />
 
+      {/* Descargas */}
+      <InfoItem
+        icon={<Download size={18} />}
+        label="Descargas"
+        value={
+          item.downloads
+            .toLocaleString()
+        }
+      />
 
-<div className="rounded-xl border border-border bg-surface p-5">
+      {/* Fecha */}
+      <InfoItem
+        icon={<Calendar size={18} />}
+        label="Agregado"
+        value={formatDate(
+          item.createdAt,
+        )}
+      />
 
-<p className="text-sm text-muted">
-Autor
-</p>
+    </div>
+  );
+}
 
-<p className="mt-1 font-medium">
-{item.author}
-</p>
+interface InfoItemProps {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+}
 
-</div>
+function InfoItem({
+  icon,
+  label,
+  value,
+}: InfoItemProps) {
+  return (
+    <div
+      className="
+        rounded-2xl
+        border
+        border-border
+        bg-surface
+        p-5
+      "
+    >
+      <div
+        className="
+          flex
+          items-center
+          gap-2
+          text-muted
+        "
+      >
+        {icon}
 
+        <span className="text-sm">
+          {label}
+        </span>
+      </div>
 
-
-<div className="rounded-xl border border-border bg-surface p-5">
-
-<p className="text-sm text-muted">
-Descargas
-</p>
-
-<p className="mt-1 font-medium">
-{item.downloads?.toLocaleString() ?? "0"}
-</p>
-
-</div>
-
-
-
-<div className="rounded-xl border border-border bg-surface p-5">
-
-<p className="text-sm text-muted">
-Versiones
-</p>
-
-<p className="mt-1 font-medium">
-{item.version?.join(", ") ?? "Sin especificar"}
-</p>
-
-</div>
-
-
-
-<div className="rounded-xl border border-border bg-surface p-5">
-
-<p className="text-sm text-muted">
-Plataforma
-</p>
-
-<p className="mt-1 font-medium">
-{item.edition?.join(", ") ?? "Sin especificar"}
-</p>
-
-</div>
-
-
-</div>
-
-)
-
+      <p
+        className="
+          mt-3
+          font-medium
+        "
+      >
+        {value}
+      </p>
+    </div>
+  );
 }

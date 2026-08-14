@@ -2,104 +2,111 @@ import Image from "next/image";
 
 import {
   Badge,
-  Heading
+  Heading,
 } from "@/components/ui";
 
 import type {
-  ContentItem
+  ContentItem,
 } from "@/types";
 
-
 interface Props {
- item:ContentItem;
+  item: ContentItem;
 }
 
+function formatCategory(
+  category: string,
+) {
+  return category
+    .replaceAll("-", " ")
+    .replace(
+      /\b\w/g,
+      (letter) =>
+        letter.toUpperCase(),
+    );
+}
 
 export function ContentHeader({
- item
-}:Props){
+  item,
+}: Props) {
+  return (
+    <div className="space-y-7">
 
-return(
+      {/* Imagen principal */}
+      <div
+        className="
+          relative
+          aspect-video
+          overflow-hidden
+          rounded-3xl
+          border
+          border-border
+          bg-surface
+        "
+      >
+        <Image
+          src={item.image}
+          alt={item.title}
+          fill
+          priority
+          className="
+            object-cover
+          "
+        />
+      </div>
 
-<div className="space-y-6">
+      {/* Categoría / plataforma */}
+      <div
+        className="
+          flex
+          flex-wrap
+          items-center
+          gap-2
+        "
+      >
+        <Badge variant="primary">
+          {formatCategory(
+            item.category,
+          )}
+        </Badge>
 
+        <Badge variant="surface">
+          {item.platform === "both"
+            ? "Java + Bedrock"
+            : item.platform === "java"
+              ? "Java"
+              : "Bedrock"}
+        </Badge>
 
-<div
-className="
-relative
-aspect-video
-overflow-hidden
-rounded-3xl
-border
-border-border
-"
->
+        {item.version.length > 0 && (
+          <Badge variant="surface">
+            {item.version[0]}
+          </Badge>
+        )}
+      </div>
 
-<Image
+      {/* Título */}
+      <div className="space-y-3">
 
-src={item.image}
+        <Heading
+          as="h1"
+          size="2xl"
+        >
+          {item.title}
+        </Heading>
 
-alt={item.title}
+        <p
+          className="
+            max-w-3xl
+            text-lg
+            leading-8
+            text-muted
+          "
+        >
+          {item.description}
+        </p>
 
-fill
+      </div>
 
-className="
-object-cover
-"
-
-/>
-
-</div>
-
-
-
-<div className="flex flex-wrap gap-3">
-
-<Badge variant="primary">
-{item.category}
-</Badge>
-
-
-{item.edition?.map((edition) => (
-  <span
-    key={edition}
-    className="
-      rounded-full
-      bg-surface-secondary
-      px-3
-      py-1
-      text-xs
-      text-muted
-    "
-  >
-    {edition}
-  </span>
-))}
-
-</div>
-
-
-
-<Heading
-as="h1"
-size="2xl"
->
-
-{item.title}
-
-</Heading>
-
-
-
-<p className="max-w-3xl text-lg text-muted">
-
-{item.description}
-
-</p>
-
-
-</div>
-
-)
-
+    </div>
+  );
 }

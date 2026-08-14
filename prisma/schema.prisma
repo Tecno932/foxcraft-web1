@@ -1,0 +1,162 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum UserRole {
+  USER
+  ADMIN
+  OWNER
+}
+
+enum ContentCategory {
+  MODS
+  MAPS
+  SHADERS
+  RESOURCE_PACKS
+  TEXTURE_PACKS
+  UI_PACKS
+  SKINS
+  ARMOR_TRIMS
+  BANNERS
+  SCHEMATICS_JAVA
+  SCHEMATICS_BEDROCK
+}
+
+enum ContentPlatform {
+  JAVA
+  BEDROCK
+  BOTH
+}
+
+// ============================================================
+// USER
+// ============================================================
+
+model User {
+  id String @id @default(cuid())
+
+  publicId String @unique @db.VarChar(6)
+
+  username String @unique @db.VarChar(32)
+
+  passwordHash String
+
+  role UserRole @default(USER)
+
+  avatar String?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  contents Content[]
+
+  favorites Favorite[]
+
+  likes Like[]
+
+  @@index([username])
+  @@index([role])
+  @@index([createdAt])
+}
+
+// ============================================================
+// CONTENT
+// ============================================================
+
+model Content {
+  id Int @id @default(autoincrement())
+
+  slug String @unique
+
+  title String
+
+  description String @db.Text
+
+  image String
+
+  authorId String
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  category ContentCategory
+
+  version String[]
+
+  platform ContentPlatform @default(BOTH)
+
+  featured Boolean @default(false)
+
+  downloads Int @default(0)
+
+  downloadUrl String
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  favorites Favorite[]
+
+  likes Like[]
+
+  @@index([category])
+  @@index([featured])
+  @@index([createdAt])
+  @@index([downloads])
+  @@index([authorId])
+  @@index([platform])
+  @@index([category, createdAt])
+}
+
+// ============================================================
+// FAVORITES
+// ============================================================
+
+model Favorite {
+  id Int @id @default(autoincrement())
+
+  userId String
+
+  contentId Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  content Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, contentId])
+  @@index([userId])
+  @@index([contentId])
+}
+
+// ============================================================
+// LIKES
+// ============================================================
+
+model Like {
+  id Int @id @default(autoincrement())
+
+  userId String
+
+  contentId Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  content Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, contentId])
+  @@index([userId])
+  @@index([contentId])
+}

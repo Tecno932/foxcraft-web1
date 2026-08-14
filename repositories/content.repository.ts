@@ -13,22 +13,68 @@ import {
 } from "@/data";
 
 import type {
+  ContentCategory,
   ContentItem,
   SkinItem,
 } from "@/types";
 
+import { prisma } from "@/lib/prisma";
+
 const content: ContentItem[] = [
-  ...mods,
-  ...maps,
-  ...skins,
-  ...shaders,
-  ...resourcePacks,
-  ...texturePacks,
-  ...uiPacks,
-  ...armorTrims,
-  ...banners,
-  ...schematicsJava,
-  ...schematicsBedrock,
+  ...mods.map((item) => ({
+    ...item,
+    category: "mods" as const,
+  })),
+
+  ...maps.map((item) => ({
+    ...item,
+    category: "maps" as const,
+  })),
+
+  ...shaders.map((item) => ({
+    ...item,
+    category: "shaders" as const,
+  })),
+
+  ...resourcePacks.map((item) => ({
+    ...item,
+    category: "resource-packs" as const,
+  })),
+
+  ...texturePacks.map((item) => ({
+    ...item,
+    category: "texture-packs" as const,
+  })),
+
+  ...uiPacks.map((item) => ({
+    ...item,
+    category: "ui-packs" as const,
+  })),
+
+  ...skins.map((item) => ({
+    ...item,
+    category: "skins" as const,
+  })),
+
+  ...armorTrims.map((item) => ({
+    ...item,
+    category: "armor-trims" as const,
+  })),
+
+  ...banners.map((item) => ({
+    ...item,
+    category: "banners" as const,
+  })),
+
+  ...schematicsJava.map((item) => ({
+    ...item,
+    category: "schematics-java" as const,
+  })),
+
+  ...schematicsBedrock.map((item) => ({
+    ...item,
+    category: "schematics-bedrock" as const,
+  })),
 ];
 
 function getByCategory(
@@ -40,31 +86,52 @@ function getByCategory(
 }
 
 export const ContentRepository = {
-  getAll(): ContentItem[] {
-    return content;
+  async getAll() {
+    return prisma.content.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
   },
 
-  getFeatured(): ContentItem[] {
-    return content.filter(
-      (item) => item.featured,
-    );
+  async getFeatured() {
+    return prisma.content.findMany({
+      where: {
+        featured: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
   },
 
-  getLatest(
-    limit = 6,
-  ): ContentItem[] {
-    return content.slice(0, limit);
+  async getLatest(limit = 8) {
+    return prisma.content.findMany({
+      take: limit,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
   },
 
-  getBySlug(
-    slug: string,
-  ): ContentItem | undefined {
-    return content.find(
-      (item) => item.slug === slug,
-    );
+  async getBySlug(slug: string) {
+    return prisma.content.findUnique({
+      where: {
+        slug,
+      },
+    });
   },
 
-  getByCategory,
+  async getByCategory(category: ContentCategory) {
+    return prisma.content.findMany({
+      where: {
+        category,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  },
 
   getRelated(
     category: string,

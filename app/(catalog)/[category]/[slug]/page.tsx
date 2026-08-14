@@ -7,13 +7,14 @@ import {
 } from "@/components/ui";
 
 import {
-  SkinHeader,
-} from "@/components/catalog/skins";
-
-import {
   ContentHeader,
   ContentInfo,
+  ContentActions,
 } from "@/components/content";
+
+import {
+  SkinHeader,
+} from "@/components/catalog/skins";
 
 import {
   ContentRepository,
@@ -39,41 +40,129 @@ export default async function ContentPage({
   } = await params;
 
   const item =
-    ContentRepository.getBySlug(slug);
+    ContentRepository.getBySlug(
+      slug,
+    );
 
   if (!item) {
     notFound();
   }
 
   /*
-   * Evita que una URL como /maps/skin-slug
-   * muestre accidentalmente el contenido.
+   * Evita que un contenido pueda
+   * abrirse desde una categoría incorrecta.
+   *
+   * Ejemplo:
+   *
+   * /maps/utilities
+   *
+   * si "utilities" pertenece a mods,
+   * devuelve 404.
    */
   if (item.category !== category) {
     notFound();
   }
 
+  /*
+   * Las skins tienen su propia
+   * presentación.
+   */
+  if (item.category === "skins") {
+    return (
+      <main>
+        <section className="py-20">
+          <Container>
+
+            <SkinHeader
+              item={
+                item as SkinItem
+              }
+            />
+
+          </Container>
+        </section>
+      </main>
+    );
+  }
+
   return (
     <main>
-      <section className="py-20">
+      <section className="py-16 lg:py-20">
         <Container>
-          <div className="space-y-10">
 
-            {item.category === "skins" ? (
-              <SkinHeader
-                item={item as SkinItem}
-              />
-            ) : (
-              <ContentHeader
-                item={item}
-              />
-            )}
+          <div
+            className="
+              mx-auto
+              max-w-5xl
+              space-y-10
+            "
+          >
 
+            {/* Contenido principal */}
+            <ContentHeader
+              item={item}
+            />
+
+            {/* Información */}
             <ContentInfo
               item={item}
             />
 
+            {/* Descarga */}
+            <div
+              className="
+                rounded-2xl
+                border
+                border-border
+                bg-surface
+                p-6
+              "
+            >
+              <div
+                className="
+                  flex
+                  flex-col
+                  gap-5
+                  sm:flex-row
+                  sm:items-center
+                  sm:justify-between
+                "
+              >
+
+                <div>
+                  <h2
+                    className="
+                      font-heading
+                      text-xl
+                      font-semibold
+                    "
+                  >
+                    Descargar {item.title}
+                  </h2>
+
+                  <p
+                    className="
+                      mt-1
+                      text-sm
+                      text-muted
+                    "
+                  >
+                    Accede al enlace de descarga
+                    del contenido.
+                  </p>
+                </div>
+
+                <ContentActions
+                  download={
+                    item.download
+                  }
+                />
+
+              </div>
+            </div>
+
           </div>
+
         </Container>
       </section>
     </main>
