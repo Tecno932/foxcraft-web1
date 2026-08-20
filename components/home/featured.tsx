@@ -3,15 +3,17 @@ import {
   Heading,
 } from "@/components/ui";
 
-import { ContentGrid } from "@/components/catalog";
+import {
+  ContentGrid,
+} from "@/components/catalog";
 
 import {
   ContentRepository,
 } from "@/repositories/content.repository";
 
-export function Featured() {
+export async function Featured() {
   const featured =
-    ContentRepository.getFeatured();
+    await ContentRepository.getFeatured();
 
   return (
     <section className="py-20">

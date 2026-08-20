@@ -257,28 +257,55 @@ const featuredPlayers = new Set([
   "MrBeast",
 ]);
 
-export const skins: SkinItem[] = players.map((username, index) => ({
-  id: `skin-${index + 1}-${username.toLowerCase()}`,
-  slug: username.toLowerCase(),
-  title: username,
-  description: `Minecraft skin de ${username}.`,
-  image: `${MCHEADS}/body/${encodeURIComponent(username)}/256`,
-  category: "skins",
-  edition: ["java", "bedrock"],
-  version: ["all"],
-  author: username,
-  username,
-  skinUrl: `${MCHEADS}/skin/${encodeURIComponent(username)}`,
-  featured: [
-    "Notch",
-    "MHF_Steve",
-    "MHF_Alex",
-    "Herobrine",
-  ].includes(username),
-  downloads: 0,
-  tags: [
-    "minecraft",
-    "skin",
-    username.toLowerCase(),
-  ],
-}));
+export const skins: SkinItem[] = players.map(
+  (username, index) => ({
+    id: index + 1,
+
+    slug: username.toLowerCase(),
+
+    title: username,
+
+    description:
+      `Minecraft skin de ${username}.`,
+
+    image:
+      `${MCHEADS}/body/${encodeURIComponent(username)}/256`,
+
+    category: "skins",
+
+    edition: [
+      "java",
+      "bedrock",
+    ],
+
+    version: ["all"],
+
+    author: username,
+
+    username,
+
+    skinUrl:
+      `${MCHEADS}/skin/${encodeURIComponent(username)}`,
+
+    featured: [
+      "Notch",
+      "MHF_Steve",
+      "MHF_Alex",
+      "Herobrine",
+    ].includes(username),
+
+    downloads: 0,
+
+    tags: [
+      "minecraft",
+      "skin",
+      username.toLowerCase(),
+    ],
+
+    platform: "both",
+
+    download: "",
+
+    createdAt: new Date(),
+  }),
+);

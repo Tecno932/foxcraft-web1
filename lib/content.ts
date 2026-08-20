@@ -2,6 +2,7 @@ import {
   ContentRepository
 } from "@/repositories";
 
+import type { ContentCategory } from "@/types";
 
 export function getAllContent(){
 
@@ -25,7 +26,7 @@ export function getContentByCategory(
   category:string
 ){
 
-  return ContentRepository.getByCategory(category);
+  return ContentRepository.getByCategory(category as ContentCategory);
 
 }
 

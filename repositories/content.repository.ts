@@ -18,9 +18,20 @@ import type {
   SkinItem,
 } from "@/types";
 
-import { prisma } from "@/lib/prisma";
+import {
+  mapContent,
+  mapContents,
+} from "@/lib/content/mapper";
 
-const content: ContentItem[] = [
+import {
+  prisma,
+} from "@/lib/prisma";
+
+// ============================================================
+// STATIC CONTENT
+// ============================================================
+
+const staticContent: ContentItem[] = [
   ...mods.map((item) => ({
     ...item,
     category: "mods" as const,
@@ -77,87 +88,229 @@ const content: ContentItem[] = [
   })),
 ];
 
-function getByCategory(
-  category: string,
+// ============================================================
+// STATIC HELPERS
+// ============================================================
+
+function getStaticByCategory(
+  category: ContentCategory,
 ): ContentItem[] {
-  return content.filter(
+  return staticContent.filter(
     (item) => item.category === category,
   );
 }
 
+function getStaticBySlug(
+  slug: string,
+): ContentItem | null {
+  return (
+    staticContent.find(
+      (item) => item.slug === slug,
+    ) ?? null
+  );
+}
+
+// ============================================================
+// REPOSITORY
+// ============================================================
+
 export const ContentRepository = {
-  async getAll() {
-    return prisma.content.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+
+  // ----------------------------------------------------------
+  // GET ALL
+  // ----------------------------------------------------------
+
+  async getAll(): Promise<ContentItem[]> {
+    const items =
+      await prisma.content.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+    if (items.length > 0) {
+      return mapContents(items);
+    }
+
+    return staticContent;
   },
 
-  async getFeatured() {
-    return prisma.content.findMany({
-      where: {
-        featured: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+  // ----------------------------------------------------------
+  // GET FEATURED
+  // ----------------------------------------------------------
+
+  async getFeatured(): Promise<ContentItem[]> {
+    const items =
+      await prisma.content.findMany({
+        where: {
+          featured: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+    if (items.length > 0) {
+      return mapContents(items);
+    }
+
+    return staticContent.filter(
+      (item) => item.featured,
+    );
   },
 
-  async getLatest(limit = 8) {
-    return prisma.content.findMany({
-      take: limit,
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-  },
+  // ----------------------------------------------------------
+  // GET LATEST
+  // ----------------------------------------------------------
 
-  async getBySlug(slug: string) {
-    return prisma.content.findUnique({
-      where: {
-        slug,
-      },
-    });
-  },
+  async getLatest(
+    limit = 8,
+  ): Promise<ContentItem[]> {
+    const items =
+      await prisma.content.findMany({
+        take: limit,
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
 
-  async getByCategory(category: ContentCategory) {
-    return prisma.content.findMany({
-      where: {
-        category,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-  },
+    if (items.length > 0) {
+      return mapContents(items);
+    }
 
-  getRelated(
-    category: string,
-    slug: string,
-    limit = 4,
-  ): ContentItem[] {
-    return content
-      .filter(
-        (item) =>
-          item.category === category &&
-          item.slug !== slug,
+    return staticContent
+      .slice()
+      .sort(
+        (a, b) =>
+          b.createdAt.getTime() -
+          a.createdAt.getTime(),
       )
       .slice(0, limit);
   },
 
-  search(
+  // ----------------------------------------------------------
+  // GET BY SLUG
+  // ----------------------------------------------------------
+
+  async getBySlug(
+    slug: string,
+  ): Promise<ContentItem | null> {
+    const item =
+      await prisma.content.findUnique({
+        where: {
+          slug,
+        },
+      });
+
+    if (item) {
+      return mapContent(item);
+    }
+
+    return getStaticBySlug(slug);
+  },
+
+  // ----------------------------------------------------------
+  // GET BY CATEGORY
+  // ----------------------------------------------------------
+
+  async getByCategory(
+    category: ContentCategory,
+  ): Promise<ContentItem[]> {
+    const items =
+      await prisma.content.findMany({
+        where: {
+          category:
+            category.toUpperCase() as never,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+    if (items.length > 0) {
+      return mapContents(items);
+    }
+
+    return getStaticByCategory(category);
+  },
+
+  // ----------------------------------------------------------
+  // GET RELATED
+  // ----------------------------------------------------------
+
+  async getRelated(
+    category: ContentCategory,
+    slug: string,
+    limit = 4,
+  ): Promise<ContentItem[]> {
+    const items =
+      await prisma.content.findMany({
+        where: {
+          category:
+            category.toUpperCase() as never,
+          NOT: {
+            slug,
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: limit,
+      });
+
+    if (items.length > 0) {
+      return mapContents(items);
+    }
+
+    return getStaticByCategory(category)
+      .filter(
+        (item) => item.slug !== slug,
+      )
+      .slice(0, limit);
+  },
+
+  // ----------------------------------------------------------
+  // SEARCH
+  // ----------------------------------------------------------
+
+  async search(
     query: string,
-  ): ContentItem[] {
+  ): Promise<ContentItem[]> {
     const value =
       query.toLowerCase().trim();
 
     if (!value) {
-      return content;
+      return this.getAll();
     }
 
-    return content.filter(
+    const items =
+      await prisma.content.findMany({
+        where: {
+          OR: [
+            {
+              title: {
+                contains: value,
+                mode: "insensitive",
+              },
+            },
+            {
+              description: {
+                contains: value,
+                mode: "insensitive",
+              },
+            },
+          ],
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+    if (items.length > 0) {
+      return mapContents(items);
+    }
+
+    return staticContent.filter(
       (item) =>
         item.title
           .toLowerCase()
@@ -168,10 +321,14 @@ export const ContentRepository = {
     );
   },
 
-  getSkins(): SkinItem[] {
-    return content.filter(
-      (item): item is SkinItem =>
-        item.category === "skins",
-    );
+  // ----------------------------------------------------------
+  // GET SKINS
+  // ----------------------------------------------------------
+
+  async getSkins(): Promise<SkinItem[]> {
+    const items =
+      await this.getByCategory("skins");
+
+    return items as SkinItem[];
   },
 };

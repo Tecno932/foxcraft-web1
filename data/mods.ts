@@ -10,11 +10,12 @@ export const mods: ContentItem[] = [
     image: "/images/mods/IMG_20250215_102329_817.webp",
     version: ["1.20"],
     platform: "bedrock",
+    category: "mods",
     featured: false,
     downloads: 0,
     download:
       "https://link-target.net/1285228/scp-dystopia",
-    createdAt: "2026-07-21",
+    createdAt: new Date("2026-07-21"),
   },
 
   {
@@ -26,11 +27,12 @@ export const mods: ContentItem[] = [
     image: "/images/mods/IMG_20250210_180400_503.webp",
     version: ["1.20"],
     platform: "bedrock",
+    category: "mods",
     featured: false,
     downloads: 0,
     download:
       "https://direct-link.net/1285228/epic-bosses",
-    createdAt: "2026-07-21",
+    createdAt: new Date("2026-07-21"),
   },
 
   {
@@ -42,11 +44,12 @@ export const mods: ContentItem[] = [
     image: "/images/mods/IMG_20250210_180810_504.webp",
     version: ["1.20"],
     platform: "bedrock",
+    category: "mods",
     featured: false,
     downloads: 0,
     download:
       "https://direct-link.net/1285228/marvel-superheroes",
-    createdAt: "2026-07-21",
+    createdAt: new Date("2026-07-21"),
   },
 
   {
@@ -59,11 +62,12 @@ export const mods: ContentItem[] = [
       "/images/mods/WeaponsAndArmors_Thumbnail_0.webp",
     version: ["1.20"],
     platform: "bedrock",
+    category: "mods",
     featured: false,
     downloads: 0,
     download:
       "https://direct-link.net/1285228/weapons-y-armors",
-    createdAt: "2026-07-21",
+    createdAt: new Date("2026-07-21"),
   },
 
   {
@@ -76,11 +80,12 @@ export const mods: ContentItem[] = [
       "/images/mods/BPL_Thumbnail_0.webp",
     version: ["1.20"],
     platform: "bedrock",
+    category: "mods",
     featured: false,
     downloads: 0,
     download:
       "https://link-center.net/1285228/bosses-plus",
-    createdAt: "2026-07-21",
+    createdAt: new Date("2026-07-21"),
   },
 
   {
@@ -93,11 +98,12 @@ export const mods: ContentItem[] = [
       "/images/mods/BAM_Thumbnail_0.webp",
     version: ["1.20"],
     platform: "bedrock",
+    category: "mods",
     featured: false,
     downloads: 0,
     download:
       "https://link-target.net/1285228/morph-into-anything",
-    createdAt: "2026-07-21",
+    createdAt: new Date("2026-07-21"),
   },
 
   {
@@ -110,11 +116,12 @@ export const mods: ContentItem[] = [
       "/images/mods/Thumbnail_0.webp",
     version: ["1.20"],
     platform: "bedrock",
+    category: "mods",
     featured: false,
     downloads: 0,
     download:
       "https://link-center.net/1285228/dragons",
-    createdAt: "2026-07-21",
+    createdAt: new Date("2026-07-21"),
   },
 
   {
@@ -127,11 +134,12 @@ export const mods: ContentItem[] = [
       "/images/mods/wizardcraftaddon_Thumbnail_0.webp",
     version: ["1.20"],
     platform: "bedrock",
+    category: "mods",
     featured: false,
     downloads: 0,
     download:
       "https://link-hub.net/1285228/wizard-craft",
-    createdAt: "2026-07-21",
+    createdAt: new Date("2026-07-21"),
   },
 
   {
@@ -144,11 +152,12 @@ export const mods: ContentItem[] = [
       "/images/mods/IMG_20250217_131318_366.webp",
     version: ["1.20"],
     platform: "bedrock",
+    category: "mods",
     featured: true,
     downloads: 0,
     download:
       "https://link-center.net/1285228/dead-zone",
-    createdAt: "2026-07-21",
+    createdAt: new Date("2026-07-21"),
   },
 
   {
@@ -161,11 +170,12 @@ export const mods: ContentItem[] = [
       "/images/mods/IMG_20250216_193738_063.webp",
     version: ["1.20"],
     platform: "bedrock",
+    category: "mods",
     featured: false,
     downloads: 0,
     download:
       "https://link-hub.net/1285228/alexs-cave",
-    createdAt: "2026-07-21",
+    createdAt: new Date("2026-07-21"),
   },
 
   {
@@ -178,11 +188,12 @@ export const mods: ContentItem[] = [
       "/images/mods/gravestones_Thumbnail_0.webp",
     version: ["1.20"],
     platform: "bedrock",
+    category: "mods",
     featured: true,
     downloads: 0,
     download:
       "https://link-target.net/1285228/gravestone",
-    createdAt: "2026-07-21",
+    createdAt: new Date("2026-07-21"),
   },
 
   {
@@ -195,11 +206,12 @@ export const mods: ContentItem[] = [
       "/images/mods/IMG_20250319_164748_437.webp",
     version: ["1.20"],
     platform: "bedrock",
+    category: "mods",
     featured: false,
     downloads: 0,
     download:
       "https://direct-link.net/1285228/magic-add-on",
-    createdAt: "2026-07-21",
+    createdAt: new Date("2026-07-21"),
   },
 
   {
@@ -212,11 +224,12 @@ export const mods: ContentItem[] = [
       "/images/mods/UTILITIES_Thumbnail_0.webp",
     version: ["1.20"],
     platform: "bedrock",
+    category: "mods",
     featured: true,
     downloads: 0,
     download:
       "https://link-hub.net/1285228/utilities",
-    createdAt: "2026-07-21",
+    createdAt: new Date("2026-07-21"),
   },
 ];
 

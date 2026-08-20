@@ -14,18 +14,17 @@ interface Props {
 }
 
 function formatDate(
-  date: string,
-) {
-  const parsed =
-    new Date(date);
-
-  if (Number.isNaN(
-    parsed.getTime(),
-  )) {
-    return date;
+  date: Date,
+): string {
+  if (
+    Number.isNaN(
+      date.getTime(),
+    )
+  ) {
+    return "Fecha desconocida";
   }
 
-  return parsed.toLocaleDateString(
+  return date.toLocaleDateString(
     "es-AR",
     {
       year: "numeric",
@@ -47,8 +46,6 @@ export function ContentInfo({
         lg:grid-cols-4
       "
     >
-
-      {/* Autor */}
       <InfoItem
         icon={<User size={18} />}
         label="Autor"
@@ -58,7 +55,6 @@ export function ContentInfo({
         }
       />
 
-      {/* Versión */}
       <InfoItem
         icon={<Gamepad2 size={18} />}
         label="Minecraft"
@@ -69,17 +65,14 @@ export function ContentInfo({
         }
       />
 
-      {/* Descargas */}
       <InfoItem
         icon={<Download size={18} />}
         label="Descargas"
-        value={
-          item.downloads
-            .toLocaleString()
-        }
+        value={item.downloads.toLocaleString(
+          "es-AR",
+        )}
       />
 
-      {/* Fecha */}
       <InfoItem
         icon={<Calendar size={18} />}
         label="Agregado"
@@ -87,7 +80,6 @@ export function ContentInfo({
           item.createdAt,
         )}
       />
-
     </div>
   );
 }

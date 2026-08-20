@@ -1,5 +1,3 @@
-// types/content.ts
-
 export type ContentCategory =
   | "mods"
   | "maps"
@@ -23,10 +21,15 @@ export type ContentEdition =
   | "bedrock"
   | "both";
 
+/**
+ * Modelo normalizado utilizado por la interfaz.
+ *
+ * Los datos provenientes de Prisma o de archivos
+ * estáticos deben ser adaptados a esta estructura
+ * antes de llegar a los componentes.
+ */
 export interface ContentItem {
   id: number;
-
-  category?: ContentCategory;
 
   slug: string;
 
@@ -38,11 +41,15 @@ export interface ContentItem {
 
   author?: string;
 
+  authorId?: string;
+
   version: string[];
 
   platform: ContentPlatform;
 
   edition?: ContentEdition[];
+
+  category: ContentCategory;
 
   featured: boolean;
 
@@ -50,30 +57,33 @@ export interface ContentItem {
 
   download: string;
 
-  createdAt: string;
+  createdAt: Date;
+
+  updatedAt?: Date;
 }
 
-export interface SchematicItem
-  extends ContentItem {
+/**
+ * Contenido de tipo schematic.
+ */
+export interface SchematicItem extends ContentItem {
   category:
     | "schematics-java"
     | "schematics-bedrock";
 
-  width?: number;
-
-  height?: number;
-
-  length?: number;
-
   blocks?: number;
-
-  format?: string;
-
-  minecraftVersion?: string;
-
-  fileSize?: string;
 }
 
-export type CatalogItem =
-  | ContentItem
-  | SchematicItem;
+/**
+ * Contenido de tipo skin.
+ */
+export interface SkinItem extends ContentItem {
+  category: "skins";
+
+  username?: string;
+
+  uuid?: string;
+
+  model?: "classic" | "slim";
+
+  skinUrl?: string;
+}

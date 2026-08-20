@@ -65,7 +65,7 @@ export function ContentHeader({
       >
         <Badge variant="primary">
           {formatCategory(
-            item.category,
+            item.category ?? "mods",
           )}
         </Badge>
 

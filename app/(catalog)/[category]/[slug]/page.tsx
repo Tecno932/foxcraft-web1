@@ -40,7 +40,7 @@ export default async function ContentPage({
   } = await params;
 
   const item =
-    ContentRepository.getBySlug(
+    await ContentRepository.getBySlug(
       slug,
     );
 
@@ -49,36 +49,27 @@ export default async function ContentPage({
   }
 
   /*
-   * Evita que un contenido pueda
-   * abrirse desde una categoría incorrecta.
-   *
-   * Ejemplo:
-   *
-   * /maps/utilities
-   *
-   * si "utilities" pertenece a mods,
-   * devuelve 404.
+   * Verifica que el contenido pertenezca
+   * realmente a la categoría de la URL.
    */
   if (item.category !== category) {
     notFound();
   }
 
   /*
-   * Las skins tienen su propia
-   * presentación.
+   * Las skins tienen una presentación
+   * diferente al resto del catálogo.
    */
   if (item.category === "skins") {
     return (
       <main>
         <section className="py-20">
           <Container>
-
             <SkinHeader
               item={
                 item as SkinItem
               }
             />
-
           </Container>
         </section>
       </main>
@@ -89,7 +80,6 @@ export default async function ContentPage({
     <main>
       <section className="py-16 lg:py-20">
         <Container>
-
           <div
             className="
               mx-auto
@@ -97,18 +87,14 @@ export default async function ContentPage({
               space-y-10
             "
           >
-
-            {/* Contenido principal */}
             <ContentHeader
               item={item}
             />
 
-            {/* Información */}
             <ContentInfo
               item={item}
             />
 
-            {/* Descarga */}
             <div
               className="
                 rounded-2xl
@@ -128,7 +114,6 @@ export default async function ContentPage({
                   sm:justify-between
                 "
               >
-
                 <div>
                   <h2
                     className="
@@ -147,22 +132,17 @@ export default async function ContentPage({
                       text-muted
                     "
                   >
-                    Accede al enlace de descarga
-                    del contenido.
+                    Accede al enlace de
+                    descarga del contenido.
                   </p>
                 </div>
 
                 <ContentActions
-                  download={
-                    item.download
-                  }
+                  download={item.download}
                 />
-
               </div>
             </div>
-
           </div>
-
         </Container>
       </section>
     </main>

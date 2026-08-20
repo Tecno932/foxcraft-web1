@@ -1,4 +1,6 @@
-import { notFound } from "next/navigation";
+import {
+  notFound,
+} from "next/navigation";
 
 import {
   Container,
@@ -14,7 +16,7 @@ import {
 } from "@/components/catalog";
 
 import type {
-  ContentItem,
+  ContentCategory,
   SkinItem,
 } from "@/types";
 
@@ -33,12 +35,24 @@ interface CategoryPageProps {
   }>;
 }
 
-const ITEMS_PER_PAGE = 25;
+const ITEMS_PER_PAGE = 24;
 
-function isSkinItem(
-  item: ContentItem,
-): item is SkinItem {
-  return item.category === "skins";
+function isContentCategory(
+  value: string,
+): value is ContentCategory {
+  return [
+    "mods",
+    "maps",
+    "shaders",
+    "resource-packs",
+    "texture-packs",
+    "ui-packs",
+    "skins",
+    "armor-trims",
+    "banners",
+    "schematics-java",
+    "schematics-bedrock",
+  ].includes(value);
 }
 
 export default async function CategoryPage({
@@ -47,11 +61,15 @@ export default async function CategoryPage({
 }: CategoryPageProps) {
   const { category } = await params;
 
+  if (!isContentCategory(category)) {
+    notFound();
+  }
+
   const { page } =
     (await searchParams) ?? {};
 
   const items =
-    ContentRepository.getByCategory(
+    await ContentRepository.getByCategory(
       category,
     );
 
@@ -110,23 +128,19 @@ export default async function CategoryPage({
             {category === "skins" ? (
               <>
                 <SkinGrid
-                  items={paginatedItems.filter(isSkinItem)}
+                  items={
+                    paginatedItems as SkinItem[]
+                  }
                 />
 
                 <SkinPagination
-                  currentPage={
-                    safePage
-                  }
-                  totalPages={
-                    totalPages
-                  }
+                  currentPage={safePage}
+                  totalPages={totalPages}
                 />
               </>
             ) : (
               <ContentGrid
-                items={
-                  paginatedItems
-                }
+                items={paginatedItems}
               />
             )}
           </div>
