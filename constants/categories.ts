@@ -31,7 +31,7 @@ maps:{
 
 
 shaders:{
-  title:"Shaders",
+  title:"Texture and Shaders",
   description:
   "Mejora los gráficos de Minecraft con nuevos efectos visuales."
 },

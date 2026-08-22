@@ -1,236 +1,41 @@
 import type { ContentItem } from "@/types";
 
 export const mods: ContentItem[] = [
-  {
-    id: 1,
-    slug: "scp-dystopia",
-    title: "SCP Dystopia",
-    description:
-      "Addon inspirado en el universo SCP que añade criaturas, instalaciones y anomalías para crear una experiencia de supervivencia mucho más desafiante en Minecraft Bedrock.",
-    image: "/images/mods/IMG_20250215_102329_817.webp",
-    version: ["1.20"],
-    platform: "bedrock",
-    category: "mods",
-    featured: false,
-    downloads: 0,
-    download:
-      "https://link-target.net/1285228/scp-dystopia",
-    createdAt: new Date("2026-07-21"),
-  },
-
-  {
-    id: 2,
-    slug: "epic-bosses",
-    title: "Epic Bosses",
-    description:
-      "Añade poderosos jefes con habilidades únicas y recompensas especiales, haciendo que la exploración y los combates sean mucho más intensos.",
-    image: "/images/mods/IMG_20250210_180400_503.webp",
-    version: ["1.20"],
-    platform: "bedrock",
-    category: "mods",
-    featured: false,
-    downloads: 0,
-    download:
-      "https://direct-link.net/1285228/epic-bosses",
-    createdAt: new Date("2026-07-21"),
-  },
-
-  {
-    id: 3,
-    slug: "marvel-superheroes",
-    title: "Marvel Superheroes",
-    description:
-      "Incorpora héroes y villanos inspirados en Marvel junto con armaduras, habilidades y objetos temáticos para Minecraft Bedrock.",
-    image: "/images/mods/IMG_20250210_180810_504.webp",
-    version: ["1.20"],
-    platform: "bedrock",
-    category: "mods",
-    featured: false,
-    downloads: 0,
-    download:
-      "https://direct-link.net/1285228/marvel-superheroes",
-    createdAt: new Date("2026-07-21"),
-  },
-
-  {
-    id: 4,
-    slug: "weapons-armors",
-    title: "Weapons & Armors",
-    description:
-      "Agrega una gran variedad de armas, armaduras y equipamiento con nuevos diseños para ampliar las opciones de combate y supervivencia.",
-    image:
-      "/images/mods/WeaponsAndArmors_Thumbnail_0.webp",
-    version: ["1.20"],
-    platform: "bedrock",
-    category: "mods",
-    featured: false,
-    downloads: 0,
-    download:
-      "https://direct-link.net/1285228/weapons-y-armors",
-    createdAt: new Date("2026-07-21"),
-  },
-
-  {
-    id: 5,
-    slug: "bosses-plus",
-    title: "Bosses+",
-    description:
-      "Introduce nuevos jefes con mecánicas de combate, ataques especiales y recompensas exclusivas para desafiar a los jugadores.",
-    image:
-      "/images/mods/BPL_Thumbnail_0.webp",
-    version: ["1.20"],
-    platform: "bedrock",
-    category: "mods",
-    featured: false,
-    downloads: 0,
-    download:
-      "https://link-center.net/1285228/bosses-plus",
-    createdAt: new Date("2026-07-21"),
-  },
-
-  {
-    id: 6,
-    slug: "morph-into-anything",
-    title: "Morph Into Anything",
-    description:
-      "Permite transformarse en diferentes criaturas del juego para adoptar su apariencia y hacer las partidas mucho más divertidas.",
-    image:
-      "/images/mods/BAM_Thumbnail_0.webp",
-    version: ["1.20"],
-    platform: "bedrock",
-    category: "mods",
-    featured: false,
-    downloads: 0,
-    download:
-      "https://link-target.net/1285228/morph-into-anything",
-    createdAt: new Date("2026-07-21"),
-  },
-
-  {
-    id: 7,
-    slug: "dragons",
-    title: "Dragons",
-    description:
-      "Añade diferentes especies de dragones con comportamientos propios, ofreciendo nuevas aventuras y enemigos en el mundo de Minecraft.",
-    image:
-      "/images/mods/Thumbnail_0.webp",
-    version: ["1.20"],
-    platform: "bedrock",
-    category: "mods",
-    featured: false,
-    downloads: 0,
-    download:
-      "https://link-center.net/1285228/dragons",
-    createdAt: new Date("2026-07-21"),
-  },
-
-  {
-    id: 8,
-    slug: "wizard-craft",
-    title: "Wizard Craft",
-    description:
-      "Addon centrado en la magia que incorpora hechizos, bastones, enemigos y objetos mágicos para ampliar la jugabilidad.",
-    image:
-      "/images/mods/wizardcraftaddon_Thumbnail_0.webp",
-    version: ["1.20"],
-    platform: "bedrock",
-    category: "mods",
-    featured: false,
-    downloads: 0,
-    download:
-      "https://link-hub.net/1285228/wizard-craft",
-    createdAt: new Date("2026-07-21"),
-  },
-
-  {
-    id: 9,
-    slug: "deadzone",
-    title: "DeadZone",
-    description:
-      "Transforma el mundo en un entorno postapocalíptico con criaturas hostiles, nuevos peligros y una supervivencia mucho más exigente.",
-    image:
-      "/images/mods/IMG_20250217_131318_366.webp",
-    version: ["1.20"],
-    platform: "bedrock",
-    category: "mods",
-    featured: true,
-    downloads: 0,
-    download:
-      "https://link-center.net/1285228/dead-zone",
-    createdAt: new Date("2026-07-21"),
-  },
-
-  {
-    id: 10,
-    slug: "alexs-caves",
-    title: "Alex's Caves",
-    description:
-      "Addon inspirado en el conocido mod Alex's Caves, con nuevas cuevas, criaturas y biomas subterráneos para explorar.",
-    image:
-      "/images/mods/IMG_20250216_193738_063.webp",
-    version: ["1.20"],
-    platform: "bedrock",
-    category: "mods",
-    featured: false,
-    downloads: 0,
-    download:
-      "https://link-hub.net/1285228/alexs-cave",
-    createdAt: new Date("2026-07-21"),
-  },
-
-  {
-    id: 11,
-    slug: "gravestone",
-    title: "Gravestone",
-    description:
-      "Genera una lápida al morir para conservar los objetos y recuperarlos más fácilmente sin perder el progreso.",
-    image:
-      "/images/mods/gravestones_Thumbnail_0.webp",
-    version: ["1.20"],
-    platform: "bedrock",
-    category: "mods",
-    featured: true,
-    downloads: 0,
-    download:
-      "https://link-target.net/1285228/gravestone",
-    createdAt: new Date("2026-07-21"),
-  },
-
-  {
-    id: 12,
-    slug: "magic-addon",
-    title: "Magic Add-on",
-    description:
-      "Amplía Minecraft Bedrock con nuevos hechizos, objetos mágicos y mecánicas basadas en el uso de la magia.",
-    image:
-      "/images/mods/IMG_20250319_164748_437.webp",
-    version: ["1.20"],
-    platform: "bedrock",
-    category: "mods",
-    featured: false,
-    downloads: 0,
-    download:
-      "https://direct-link.net/1285228/magic-add-on",
-    createdAt: new Date("2026-07-21"),
-  },
-
-  {
-    id: 13,
-    slug: "utilities",
-    title: "Utilities",
-    description:
-      "Colección de herramientas y funciones que mejoran la calidad de vida del jugador mediante nuevos bloques y utilidades.",
-    image:
-      "/images/mods/UTILITIES_Thumbnail_0.webp",
-    version: ["1.20"],
-    platform: "bedrock",
-    category: "mods",
-    featured: true,
-    downloads: 0,
-    download:
-      "https://link-hub.net/1285228/utilities",
-    createdAt: new Date("2026-07-21"),
-  },
+  {"id": 4, "slug": "the-imitators", "title": "The Imitators", "description": "", "image": "/images/mods/the-imitators.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/r6sosfb36c2dbld/§eThe+Imitators+Update+0.6.4+.mcaddon.zip/file", createdAt: new Date("2026-08-21"),},
+  {"id": 8, "slug": "structure-in-just-one-click", "title": "Structure In Just One Click", "description": "", "image": "/images/mods/structure-in-just-one-click.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.curseforge.com/minecraft-bedrock/addons/structures-in-just-one-click", createdAt: new Date("2026-08-21"),},
+  {"id": 9, "slug": "eatable-items", "title": "Eatable Items", "description": "", "image": "/images/mods/eatable-items.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://sub4unlock.co/7wKM", createdAt: new Date("2026-08-21"),},
+  {"id": 13, "slug": "ooo-jar", "title": "OOO.JAR", "description": "", "image": "/images/mods/ooo-jar.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/oj3m0vm0b1grs7s/OOO.JAR+1.0+ADDON+By+Blockdestroyer.mcaddon.zip/file", createdAt: new Date("2026-08-21"),},
+  {"id": 18, "slug": "survival-helicopters", "title": "Survival Helicopters", "description": "", "image": "/images/mods/survival-helicopters.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/5pr4x4ss4xvtr40/Survival+Helicopters+V1.7.2.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 19, "slug": "chameleon-at-home", "title": "Chameleon At Home", "description": "", "image": "/images/mods/chameleon-at-home.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/udbpggl74e9mf8w/ChameleonatHome+v1.3.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 20, "slug": "timeless-and-classic-zero-perseus", "title": "Timeless And Classic Zero Perseus", "description": "", "image": "/images/mods/timeless-and-classic-zero-perseus.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/rftzbfz3qhdhxze/%255BTACZ%255DPerseusAddonPortBedrock.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 22, "slug": "advanced-tactical-gear", "title": "Advanced Tactical Gear", "description": "", "image": "/images/mods/advanced-tactical-gear.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/w80fjhxj9gxy0jw/ADVANCE+TACTICAL+GEAR+V1.1.3.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 26, "slug": "job-application", "title": "Job Application", "description": "", "image": "/images/mods/job-application.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/qypa6k8hejgpacb/La+solicitud+de+trabajo+llegó+a+ti+By+Blockdestroyer.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 27, "slug": "czech-wither-storm", "title": "Czech Wither Storm", "description": "", "image": "/images/mods/czech-wither-storm.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/a2pnss3dcd36h6d/Czech%2527sWitherStormAddonV1.0.0.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 32, "slug": "kiw-essentials", "title": "Kiw Essentials", "description": "", "image": "/images/mods/kiw-essentials.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/nu6s74x372bcuf4/KiwEssentialsV28.7-Free.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 34, "slug": "hamsters", "title": "Hamsters", "description": "", "image": "/images/mods/hamsters.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/s4rc8c29xffh6nk/Hamsters++Add-On+(addon)+(MDF).mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 36, "slug": "act-guns", "title": "Act Guns", "description": "", "image": "/images/mods/act-guns.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/z5n22jpncge682e/ACTGUNS0.1.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 40, "slug": "ai-multiplayer", "title": "AI Multiplayer", "description": "", "image": "/images/mods/ai-multiplayer.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/3qainokdgn9u48m/aimultiplayer1.5.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 41, "slug": "craftable-survival-flashlight", "title": "Craftable Survival Flashlight", "description": "", "image": "/images/mods/craftable-survival-flashlight.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/gx6t6r6m9u40xri/CraftableSurvivalFlashlightbyhealingm.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 46, "slug": "effect-timer-overlay", "title": "Effect Timer Overlay", "description": "", "image": "/images/mods/effect-timer-overlay.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/esfa6ghunvjdn59/Effect+Timer+Overlay+V1.0.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 48, "slug": "more-structure", "title": "More Structure", "description": "", "image": "/images/mods/more-structure.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/kcm41ucie0foewl/Más+estructuras+Add-On+By+Blockdestroyer.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 51, "slug": "raiyon-s-off-hand", "title": "Raiyon's Off Hand", "description": "", "image": "/images/mods/raiyon-s-off-hand.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/zcyby90vtgbd39y/Raiyon's+OffHandV1.4.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 52, "slug": "construct", "title": "Construct", "description": "", "image": "/images/mods/construct.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/7xbjrz3xgu01j2c/Construct-v1.0.9.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 56, "slug": "hello-kitty-and-friends-furniture", "title": "Hello Kitty And Friends Furniture", "description": "", "image": "/images/mods/hello-kitty-and-friends-furniture.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/381lrlyympgq1xb/Hello+Kitty+and+Friends+Furniture+By+MauriCraft.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 57, "slug": "isla-tacano", "title": "Isla Tacano", "description": "", "image": "/images/mods/isla-tacano.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/48fha410jyi7dad/IslaTacanoAdd-OnByBlockdestroyer.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 58, "slug": "realight-reimagined", "title": "Realight Reimagined", "description": "", "image": "/images/mods/realight-reimagined.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/b6gcdxvhfma6hml/Realight+reinventado+By+Blockdestroyer.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 59, "slug": "peppa-pig-exe", "title": "Peppa Pig.EXE", "description": "", "image": "/images/mods/peppa-pig-exe.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/xzv34pz49umec1x/PeppaPigMalditaByBlockDestroyer.Bedrock.mcaddon.zip/file", createdAt: new Date("2026-08-21"),},
+  {"id": 60, "slug": "bosses-rise", "title": "Bosses Rise", "description": "", "image": "/images/mods/bosses-rise.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/mlpdx1q47orwkiz/Bosses+Rise+Add-On+By+MauriCraft.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 61, "slug": "humungous-tnt", "title": "Humungous TNT", "description": "", "image": "/images/mods/humungous-tnt.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/67ywz9c55dyyr3q/Humungous+TNT+By+MauriCraft.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 62, "slug": "cube-utilities", "title": "Cube Utilities", "description": "", "image": "/images/mods/cube-utilities.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/37ocatbupvnc9ax/Cube+Utilities+By+MauriCraft.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 63, "slug": "the-embervault-dimension", "title": "The Embervault Dimension", "description": "", "image": "/images/mods/the-embervault-dimension.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/bn23hlihsuymsi7/The+Embervault+Dimension+By+MauriCraft.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 78, "slug": "jenny-dweller", "title": "Jenny Dweller", "description": "", "image": "/images/mods/jenny-dweller.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/nnaozkcuall1k48/JennyDwellerv8.ByBlockdestroyer.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 79, "slug": "verity", "title": "Verity", "description": "", "image": "/images/mods/verity.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/egb7jbvvq68b0cw/The+World+of+Verity+Update+By+Blockdestroyer.mcaddon.zip/file", createdAt: new Date("2026-08-21"),},
+  {"id": 80, "slug": "creepy-horse", "title": "Creepy Horse", "description": "", "image": "/images/mods/creepy-horse.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/jyvcrf7t9rmon1d/Creepy+Horse+By+Blockdestroyer.mcaddon.zip/file", createdAt: new Date("2026-08-21"),},
+  {"id": 81, "slug": "falsity", "title": "Falsity", "description": "", "image": "/images/mods/falsity.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/1ooysx5y2vqxa0i/Falsity+en+español+26.33+Update+By+Blockdestroyer.mcaddon.zip/file", createdAt: new Date("2026-08-21"),},
+  {"id": 82, "slug": "gugu-gaga", "title": "Gugu Gaga", "description": "", "image": "/images/mods/gugu-gaga.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/ga7sc878qst6q77/Gugaga+addon+V.2+Fan-made+By+Blockdestroyer.mcaddon.zip/file", createdAt: new Date("2026-08-21"),},
+  {"id": 83, "slug": "gryphon", "title": "Gryphon", "description": "", "image": "/images/mods/gryphon.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://mcpegold.com/gryphon-addon/", createdAt: new Date("2026-08-21"),},
+  {"id": 84, "slug": "advanced-movement", "title": "Advanced Movement", "description": "", "image": "/images/mods/advanced-movement.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/x0fpb57rgfsgreg/AdvancedMovement2.0bykingfad.mcaddon/file", createdAt: new Date("2026-08-21"),},
+  {"id": 85, "slug": "rpg-elemental-weapon", "title": "RPG Elemental Weapon", "description": "", "image": "/images/mods/rpg-elemental-weapon.jpg", "version": ["26+"], "platform": "bedrock", "category": "mods", "featured": false, "downloads": 0, "download": "https://www.mediafire.com/file/rdcfyc88sviyncc/RPG%20Elemental%20Weapon.mcaddon/file", createdAt: new Date("2026-08-21"),}
 ];
 
 export default mods;

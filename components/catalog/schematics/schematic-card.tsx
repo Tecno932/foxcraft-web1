@@ -16,7 +16,7 @@ export function SchematicCard({
 }: SchematicCardProps) {
   return (
     <Link
-      href={`/${item.category}/${item.slug}`}
+      href={`/${item.category}/${item.id}/${item.slug}`}
       className="
         group
         rounded-2xl

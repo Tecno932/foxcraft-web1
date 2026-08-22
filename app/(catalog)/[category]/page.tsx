@@ -1,36 +1,29 @@
-import {
-  notFound,
-} from "next/navigation";
+import { notFound } from "next/navigation";
+
+import { ContentRepository } from "@/repositories/content.repository";
+
+import { ContentGrid } from "@/components/catalog";
+
+import { SkinGrid } from "@/components/catalog/skins";
+
+import { Pagination } from "@/components/catalog/pagination";
 
 import {
   Container,
   Heading,
 } from "@/components/ui";
 
-import {
-  ContentRepository,
-} from "@/repositories/content.repository";
-
-import {
-  ContentGrid,
-} from "@/components/catalog";
-
 import type {
   ContentCategory,
   SkinItem,
 } from "@/types";
-
-import {
-  SkinGrid,
-  SkinPagination,
-} from "@/components/catalog/skins";
 
 interface CategoryPageProps {
   params: Promise<{
     category: string;
   }>;
 
-  searchParams?: Promise<{
+  searchParams: Promise<{
     page?: string;
   }>;
 }
@@ -55,32 +48,84 @@ function isContentCategory(
   ].includes(value);
 }
 
+/**
+ * Traduce la categoría de la URL a la categoría
+ * utilizada internamente por el repositorio.
+ *
+ * /shaders → texture-packs
+ */
+function getRepositoryCategory(
+  category: ContentCategory,
+): ContentCategory {
+  if (category === "shaders") {
+    return "texture-packs";
+  }
+
+  return category;
+}
+
+/**
+ * Títulos personalizados para las rutas públicas.
+ */
+function getCategoryTitle(
+  category: ContentCategory,
+): string {
+  if (category === "shaders") {
+    return "Textures and Shaders";
+  }
+
+  if (category === "skins") {
+    return "Skins";
+  }
+
+  return category
+    .replaceAll("-", " ")
+    .replace(
+      /\b\w/g,
+      (letter) => letter.toUpperCase(),
+    );
+}
+
 export default async function CategoryPage({
   params,
   searchParams,
 }: CategoryPageProps) {
   const { category } = await params;
 
+  const { page } = await searchParams;
+
   if (!isContentCategory(category)) {
     notFound();
   }
 
-  const { page } =
-    (await searchParams) ?? {};
+  /**
+   * La URL puede utilizar una categoría diferente
+   * a la categoría interna del contenido.
+   *
+   * /shaders → texture-packs
+   */
+  const repositoryCategory =
+    getRepositoryCategory(category);
 
   const items =
     await ContentRepository.getByCategory(
-      category,
+      repositoryCategory,
     );
 
   if (!items.length) {
     notFound();
   }
 
-  const currentPage = Math.max(
-    1,
-    Number(page) || 1,
+  const parsedPage = Number.parseInt(
+    page ?? "1",
+    10,
   );
+
+  const currentPage =
+    Number.isFinite(parsedPage) &&
+    parsedPage >= 1
+      ? parsedPage
+      : 1;
 
   const totalPages = Math.ceil(
     items.length / ITEMS_PER_PAGE,
@@ -102,15 +147,7 @@ export default async function CategoryPage({
     items.slice(start, end);
 
   const title =
-    category === "skins"
-      ? "Skins"
-      : category
-          .replaceAll("-", " ")
-          .replace(
-            /\b\w/g,
-            (letter) =>
-              letter.toUpperCase(),
-          );
+    getCategoryTitle(category);
 
   return (
     <main>
@@ -126,23 +163,22 @@ export default async function CategoryPage({
 
           <div className="mt-10">
             {category === "skins" ? (
-              <>
-                <SkinGrid
-                  items={
-                    paginatedItems as SkinItem[]
-                  }
-                />
-
-                <SkinPagination
-                  currentPage={safePage}
-                  totalPages={totalPages}
-                />
-              </>
+              <SkinGrid
+                items={
+                  paginatedItems as SkinItem[]
+                }
+              />
             ) : (
               <ContentGrid
                 items={paginatedItems}
               />
             )}
+
+            <Pagination
+              currentPage={safePage}
+              totalPages={totalPages}
+              basePath={`/${category}`}
+            />
           </div>
         </Container>
       </section>

@@ -12,7 +12,7 @@ export function ContentCard({
 }: ContentCardProps) {
   return (
     <Link
-      href={`/${item.category}/${item.slug}`}
+      href={`/${item.category}/${item.id}/${item.slug}`}
       className="
         group
         overflow-hidden

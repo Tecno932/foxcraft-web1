@@ -1,139 +1,64 @@
 import {
-  notFound,
-} from "next/navigation";
-
-import {
   Container,
+  Heading,
 } from "@/components/ui";
 
-import {
-  ContentHeader,
-  ContentInfo,
-  ContentActions,
-} from "@/components/content";
+import { Explorer } from "@/components/search/explorer";
 
-import {
-  SkinHeader,
-} from "@/components/catalog/skins";
+import { ContentRepository } from "@/repositories/content.repository";
 
-import {
-  ContentRepository,
-} from "@/repositories/content.repository";
-
-import type {
-  SkinItem,
-} from "@/types";
-
-interface Props {
-  params: Promise<{
-    category: string;
-    slug: string;
+interface ExplorePageProps {
+  searchParams: Promise<{
+    page?: string;
   }>;
 }
 
-export default async function ContentPage({
-  params,
-}: Props) {
-  const {
-    category,
-    slug,
-  } = await params;
+export default async function ExplorePage({
+  searchParams,
+}: ExplorePageProps) {
+  const { page } = await searchParams;
 
-  const item =
-    await ContentRepository.getBySlug(
-      slug,
-    );
+  const items =
+    await ContentRepository.getAll();
 
-  if (!item) {
-    notFound();
-  }
+  /*
+   * Explore muestra todo el contenido
+   * excepto skins.
+   */
+  const explorerItems = items.filter(
+    (item) => item.category !== "skins",
+  );
 
-  if (item.category !== category) {
-    notFound();
-  }
+  const parsedPage = Number.parseInt(
+    page ?? "1",
+    10,
+  );
 
-  if (item.category === "skins") {
-    return (
-      <main>
-        <section className="py-20">
-          <Container>
-            <SkinHeader
-              item={
-                item as SkinItem
-              }
-            />
-          </Container>
-        </section>
-      </main>
-    );
-  }
+  const currentPage =
+    Number.isFinite(parsedPage) &&
+    parsedPage >= 1
+      ? parsedPage
+      : 1;
 
   return (
     <main>
-      <section className="py-16 lg:py-20">
+      <section className="py-20">
         <Container>
-          <div
-            className="
-              mx-auto
-              max-w-5xl
-              space-y-10
-            "
-          >
-            <ContentHeader
-              item={item}
+          <Heading>
+            Explore
+          </Heading>
+
+          <p className="mt-3 text-muted">
+            Explora mods, mapas, shaders,
+            texturas y más contenido de
+            FoxCraft.
+          </p>
+
+          <div className="mt-10">
+            <Explorer
+              items={explorerItems}
+              currentPage={currentPage}
             />
-
-            <ContentInfo
-              item={item}
-            />
-
-            <div
-              className="
-                rounded-2xl
-                border
-                border-border
-                bg-surface
-                p-6
-              "
-            >
-              <div
-                className="
-                  flex
-                  flex-col
-                  gap-5
-                  sm:flex-row
-                  sm:items-center
-                  sm:justify-between
-                "
-              >
-                <div>
-                  <h2
-                    className="
-                      font-heading
-                      text-xl
-                      font-semibold
-                    "
-                  >
-                    Descargar {item.title}
-                  </h2>
-
-                  <p
-                    className="
-                      mt-1
-                      text-sm
-                      text-muted
-                    "
-                  >
-                    Accede al enlace de
-                    descarga del contenido.
-                  </p>
-                </div>
-
-                <ContentActions
-                  download={item.download}
-                />
-              </div>
-            </div>
           </div>
         </Container>
       </section>

@@ -16,7 +16,7 @@ export const navItems = [
     href: "/maps",
   },
   {
-    label: "Shaders",
+    label: "Textures and Shaders",
     href: "/shaders",
   },
   {

@@ -1,101 +1,60 @@
 "use client";
 
-import {
-  Search
-} from "lucide-react";
+import { Search } from "lucide-react";
+import { useState } from "react";
 
-import {
-  useState
-} from "react";
+import { Input } from "@/components/ui";
 
-import {
-  Input,
-} from "@/components/ui";
-
-interface Props {
-
-onSearch(
- value:string
-):void;
-
+interface SearchBarProps {
+  onSearch: (value: string) => void;
 }
-
-
 
 export function SearchBar({
-onSearch
-}:Props){
+  onSearch,
+}: SearchBarProps) {
+  const [value, setValue] =
+    useState("");
 
+  function handleChange(
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) {
+    const text = event.target.value;
 
-const [value,setValue] =
-useState("");
+    setValue(text);
+    onSearch(text);
+  }
 
+  return (
+    <div className="relative w-full">
+      <Search
+        className="
+          absolute
+          left-4
+          top-1/2
+          -translate-y-1/2
+          text-muted
+        "
+        size={20}
+      />
 
-
-function handleChange(
-e:React.ChangeEvent<HTMLInputElement>
-){
-
-const text =
-e.target.value;
-
-
-setValue(text);
-
-onSearch(text);
-
-}
-
-
-
-return (
-
-<div
-className="
-relative
-w-full
-"
->
-
-<Search
-className="
-absolute
-left-4
-top-1/2
--translate-y-1/2
-text-muted
-"
-size={20}
-/>
-
-
-<Input
-
-value={value}
-
-onChange={handleChange}
-
-placeholder="Buscar mods, mapas, shaders..."
-
-className="
-h-12
-w-full
-rounded-xl
-border
-border-border
-bg-surface
-pl-12
-pr-4
-outline-none
-transition
-focus:border-primary
-"
-
-/>
-
-
-</div>
-
-)
-
+      <Input
+        value={value}
+        onChange={handleChange}
+        placeholder="Buscar mods, mapas, shaders..."
+        className="
+          h-12
+          w-full
+          rounded-xl
+          border
+          border-border
+          bg-surface
+          pl-12
+          pr-4
+          outline-none
+          transition
+          focus:border-primary
+        "
+      />
+    </div>
+  );
 }

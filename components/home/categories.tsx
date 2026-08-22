@@ -15,7 +15,7 @@ const categories = [
     icon: ASSETS.categories.maps,
   },
   {
-    name: "Shaders",
+    name: "Visuals",
     href: "/shaders",
     icon: ASSETS.categories.shaders,
   },
@@ -25,7 +25,7 @@ const categories = [
     icon: ASSETS.categories.skins,
   },
   {
-    name: "Textures",
+    name: "Proceso...",
     href: "/resource-packs",
     icon: ASSETS.categories.resourcePacks,
   },
