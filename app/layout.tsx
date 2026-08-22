@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
+
 import { Inter, Space_Grotesk } from "next/font/google";
+
+import { Analytics } from "@vercel/analytics/next";
+
 import "./globals.css";
 
 import { Navbar } from "@/components/navigation";
+
 import { Footer } from "@/components/layout";
 
 const inter = Inter({
@@ -20,6 +25,7 @@ export const metadata: Metadata = {
     default: "FoxCraft",
     template: "%s | FoxCraft",
   },
+
   description:
     "Descubre los mejores Mods, Maps, Shaders, Resource Packs, Skins y mucho más para Minecraft.",
 };
@@ -43,6 +49,8 @@ export default function RootLayout({
         </main>
 
         <Footer />
+
+        <Analytics />
       </body>
     </html>
   );
