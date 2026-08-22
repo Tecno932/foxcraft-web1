@@ -153,97 +153,36 @@ export const ContentRepository = {
   // GET ALL
   // ==========================================================
 
-  async getAll(): Promise<ContentItem[]> {
-    const databaseItems =
-      await prisma.content.findMany({
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-
-    const mappedDatabase =
-      mapContents(databaseItems);
-
-    /*
-     * Los datos estáticos y los datos de PostgreSQL
-     * permanecen separados.
-     *
-     * PostgreSQL primero.
-     * Los archivos de data/ se mantienen intactos.
-     */
-    return [
-      ...mappedDatabase,
-      ...staticContent,
-    ];
-  },
+async getAll(): Promise<ContentItem[]> {
+  return [...staticContent];
+},
 
   // ==========================================================
   // GET FEATURED
   // ==========================================================
 
-  async getFeatured(): Promise<ContentItem[]> {
-    const databaseItems =
-      await prisma.content.findMany({
-        where: {
-          featured: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-
-    const mappedDatabase =
-      mapContents(databaseItems);
-
-    const staticItems =
-      staticContent.filter(
-        (item) => item.featured,
-      );
-
-    return [
-      ...mappedDatabase,
-      ...staticItems,
-    ];
-  },
+async getFeatured(): Promise<ContentItem[]> {
+  return staticContent.filter(
+    (item) => item.featured,
+  );
+},
 
   // ==========================================================
   // GET LATEST
   // ==========================================================
 
-  async getLatest(
-    limit = 8,
-  ): Promise<ContentItem[]> {
-    const databaseItems =
-      await prisma.content.findMany({
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: limit,
-      });
-
-    const staticItems =
-      staticContent
-        .slice()
-        .sort(
-          (a, b) =>
-            b.createdAt.getTime() -
-            a.createdAt.getTime(),
-        )
-        .slice(0, limit);
-
-    const combined = [
-      ...mapContents(databaseItems),
-      ...staticItems,
-    ];
-
-    return combined
-      .sort(
-        (a, b) =>
-          b.createdAt.getTime() -
-          a.createdAt.getTime(),
-      )
-      .slice(0, limit);
-  },
+async getLatest(
+  limit = 8,
+): Promise<ContentItem[]> {
+  return staticContent
+    .slice()
+    .sort(
+      (a, b) =>
+        b.createdAt.getTime() -
+        a.createdAt.getTime(),
+    )
+    .slice(0, limit);
+},
 
   // ==========================================================
   // GET BY ROUTE
@@ -251,52 +190,17 @@ export const ContentRepository = {
   // /[category]/[id]/[slug]
   // ==========================================================
 
-  async getByRoute(
-    category: ContentCategory,
-    id: number,
-    slug: string,
-  ): Promise<ContentItem | null> {
-    /*
-     * Primero buscamos en los datos estáticos.
-     *
-     * Esto permite que:
-     *
-     * /mods/1/scp-dystopia
-     *
-     * siga funcionando aunque ese contenido
-     * no exista en PostgreSQL.
-     */
-    const staticItem =
-      getStaticByRoute(
-        category,
-        id,
-        slug,
-      );
-
-    if (staticItem) {
-      return staticItem;
-    }
-
-    /*
-     * Si no existe en data/, buscamos en PostgreSQL.
-     */
-    const databaseItem =
-      await prisma.content.findFirst({
-        where: {
-          id,
-          slug,
-          category: databaseCategory(
-            category,
-          ),
-        },
-      });
-
-    if (databaseItem) {
-      return mapContent(databaseItem);
-    }
-
-    return null;
-  },
+async getByRoute(
+  category: ContentCategory,
+  id: number,
+  slug: string,
+): Promise<ContentItem | null> {
+  return getStaticByRoute(
+    category,
+    id,
+    slug,
+  );
+},
 
   // ==========================================================
   // GET BY SLUG
@@ -309,29 +213,11 @@ export const ContentRepository = {
   // /[category]/[id]/[slug]
   // ==========================================================
 
-  async getBySlug(
-    slug: string,
-  ): Promise<ContentItem | null> {
-    const staticItem =
-      getStaticBySlug(slug);
-
-    if (staticItem) {
-      return staticItem;
-    }
-
-    const databaseItem =
-      await prisma.content.findFirst({
-        where: {
-          slug,
-        },
-      });
-
-    if (databaseItem) {
-      return mapContent(databaseItem);
-    }
-
-    return null;
-  },
+async getBySlug(
+  slug: string,
+): Promise<ContentItem | null> {
+  return getStaticBySlug(slug);
+},
 
   // ==========================================================
   // GET BY CATEGORY
@@ -340,149 +226,50 @@ export const ContentRepository = {
 async getByCategory(
   category: ContentCategory,
 ): Promise<ContentItem[]> {
-  const staticItems =
-    getStaticByCategory(category);
-
-  const databaseCategories = [
-    "mods",
-    "maps",
-    "shaders",
-    "resource-packs",
-    "ui-packs",
-    "skins",
-    "armor-trims",
-    "banners",
-    "schematics-java",
-    "schematics-bedrock",
-  ] as const;
-
-  const supportsDatabase =
-    databaseCategories.includes(
-      category as (typeof databaseCategories)[number],
-    );
-
-  if (!supportsDatabase) {
-    return staticItems;
-  }
-
-  const databaseItems =
-    await prisma.content.findMany({
-      where: {
-        category:
-          databaseCategory(category),
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-
-  const mappedDatabase =
-    mapContents(databaseItems);
-
-  return [
-    ...mappedDatabase,
-    ...staticItems,
-  ];
+  return getStaticByCategory(category);
 },
 
   // ==========================================================
   // GET RELATED
   // ==========================================================
 
-  async getRelated(
-    category: ContentCategory,
-    slug: string,
-    limit = 4,
-  ): Promise<ContentItem[]> {
-    const databaseItems =
-      await prisma.content.findMany({
-        where: {
-          category:
-            databaseCategory(category),
-
-          NOT: {
-            slug,
-          },
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: limit,
-      });
-
-    const mappedDatabase =
-      mapContents(databaseItems);
-
-    const staticItems =
-      getStaticByCategory(category)
-        .filter(
-          (item) => item.slug !== slug,
-        )
-        .slice(0, limit);
-
-    return [
-      ...mappedDatabase,
-      ...staticItems,
-    ]
-      .slice(0, limit);
-  },
+async getRelated(
+  category: ContentCategory,
+  slug: string,
+  limit = 4,
+): Promise<ContentItem[]> {
+  return getStaticByCategory(category)
+    .filter(
+      (item) => item.slug !== slug,
+    )
+    .slice(0, limit);
+},
 
   // ==========================================================
   // SEARCH
   // ==========================================================
 
-  async search(
-    query: string,
-  ): Promise<ContentItem[]> {
-    const value =
-      query.toLowerCase().trim();
+async search(
+  query: string,
+): Promise<ContentItem[]> {
+  const value = query
+    .toLowerCase()
+    .trim();
 
-    if (!value) {
-      return this.getAll();
-    }
+  if (!value) {
+    return this.getAll();
+  }
 
-    const databaseItems =
-      await prisma.content.findMany({
-        where: {
-          OR: [
-            {
-              title: {
-                contains: value,
-                mode: "insensitive",
-              },
-            },
-            {
-              description: {
-                contains: value,
-                mode: "insensitive",
-              },
-            },
-          ],
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-
-    const databaseResults =
-      mapContents(databaseItems);
-
-    const staticResults =
-      staticContent.filter(
-        (item) =>
-          item.title
-            .toLowerCase()
-            .includes(value) ||
-          item.description
-            .toLowerCase()
-            .includes(value),
-      );
-
-    return [
-      ...databaseResults,
-      ...staticResults,
-    ];
-  },
+  return staticContent.filter(
+    (item) =>
+      item.title
+        .toLowerCase()
+        .includes(value) ||
+      item.description
+        .toLowerCase()
+        .includes(value),
+  );
+},
 
   // ==========================================================
   // GET SKINS
