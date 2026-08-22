@@ -11,9 +11,25 @@ import {
   ContentRepository,
 } from "@/repositories/content.repository";
 
+const FEATURED_CATEGORIES = [
+  "mods",
+  "maps",
+  "texture-packs",
+  "schematics-java",
+  "schematics-bedrock",
+] as const;
+
 export async function Featured() {
   const featured =
     await ContentRepository.getFeatured();
+
+  const filteredFeatured =
+    featured.filter((item) =>
+      FEATURED_CATEGORIES.includes(
+        item.category as
+          (typeof FEATURED_CATEGORIES)[number],
+      ),
+    );
 
   return (
     <section className="py-20">
@@ -29,7 +45,7 @@ export async function Featured() {
 
         <div className="mt-8">
           <ContentGrid
-            items={featured}
+            items={filteredFeatured}
           />
         </div>
       </Container>

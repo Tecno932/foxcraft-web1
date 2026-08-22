@@ -20,7 +20,7 @@ const categories = [
     icon: ASSETS.categories.shaders,
   },
   {
-    name: "Skins",
+    name: "Proceso...",
     href: "/skins",
     icon: ASSETS.categories.skins,
   },
@@ -30,7 +30,7 @@ const categories = [
     icon: ASSETS.categories.resourcePacks,
   },
   {
-    name: "Schematics",
+    name: "Proceso...",
     href: "/schematics-java",
     icon: ASSETS.categories.schematics,
   },

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { SkinItem } from "@/types";
+import Image from "next/image";
 
 interface SkinCardProps {
   item: SkinItem;
@@ -67,27 +68,30 @@ export function SkinCard({ item }: SkinCardProps) {
           </div>
         )}
 
-        <img
-          src={imageUrl}
-          alt={`Skin de Minecraft de ${username}`}
-          loading="lazy"
-          onLoad={() => setLoading(false)}
-          onError={() => setLoading(false)}
-          className={`
-            h-full
-            w-full
-            object-contain
-            p-4
-            transition-all
-            duration-500
-            group-hover:scale-105
-            ${
-              loading
-                ? "opacity-0"
-                : "opacity-100"
-            }
-          `}
-        />
+      <Image
+        src={imageUrl}
+        alt={`Skin de Minecraft de ${username}`}
+        fill
+        sizes="
+          (max-width: 640px) 50vw,
+          (max-width: 1024px) 33vw,
+          25vw
+        "
+        onLoad={() => setLoading(false)}
+        onError={() => setLoading(false)}
+        className={`
+          object-contain
+          p-4
+          transition-all
+          duration-500
+          group-hover:scale-105
+          ${
+            loading
+              ? "opacity-0"
+              : "opacity-100"
+          }
+        `}
+      />
       </div>
 
       <div className="p-4">

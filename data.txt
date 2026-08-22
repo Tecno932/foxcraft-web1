@@ -47,12 +47,13 @@ package.json
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.7.1",
+    "@prisma/client": "^5.22.0",
     "@radix-ui/react-slot": "^1.3.3",
     "@supabase/supabase-js": "^2.112.2",
     "@vercel/analytics": "^2.0.1",
@@ -66,6 +67,7 @@ package.json
     "lucide-react": "^1.29.0",
     "next": "16.3.0",
     "next-themes": "^0.4.6",
+    "pg": "^8.23.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-hook-form": "^7.84.0",
@@ -84,6 +86,7 @@ package.json
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
+    "@types/pg": "^8.21.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
@@ -91,10 +94,16 @@ package.json
     "eslint-config-next": "16.3.0",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "prisma": "^5.22.0",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "allowScripts": {
+    "@prisma/engines@7.9.1": true,
+    "prisma@7.9.1": true
   }
 }
+
 ---
 postcss.config.mjs
 const config = {
@@ -324,6 +333,36 @@ export const metadata: Metadata = {
   },
   description:
     "Descubre los mejores Mods, Maps, Shaders, Resource Packs, Skins y mucho más para Minecraft.",
+};import type { Metadata } from "next";
+
+import { Inter, Space_Grotesk } from "next/font/google";
+
+import { Analytics } from "@vercel/analytics/next";
+
+import "./globals.css";
+
+import { Navbar } from "@/components/navigation";
+
+import { Footer } from "@/components/layout";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-heading",
+});
+
+export const metadata: Metadata = {
+  title: {
+    default: "FoxCraft",
+    template: "%s | FoxCraft",
+  },
+
+  description:
+    "Descubre los mejores Mods, Maps, Shaders, Resource Packs, Skins y mucho más para Minecraft.",
 };
 
 export default function RootLayout({
@@ -345,6 +384,8 @@ export default function RootLayout({
         </main>
 
         <Footer />
+
+        <Analytics />
       </body>
     </html>
   );
@@ -889,142 +930,66 @@ export async function GET(
 ---
 page/explore/page.tsx
 import {
-  notFound,
-} from "next/navigation";
-
-import {
   Container,
+  Heading,
 } from "@/components/ui";
 
-import {
-  ContentHeader,
-  ContentInfo,
-  ContentActions,
-} from "@/components/content";
+import { Explorer } from "@/components/search/explorer";
 
-import {
-  SkinHeader,
-} from "@/components/catalog/skins";
+import { ContentRepository } from "@/repositories/content.repository";
 
-import {
-  ContentRepository,
-} from "@/repositories/content.repository";
-
-import type {
-  SkinItem,
-} from "@/types";
-
-interface Props {
-  params: Promise<{
-    category: string;
-    id: string;
-    slug: string;
+interface ExplorePageProps {
+  searchParams: Promise<{
+    page?: string;
   }>;
 }
 
-export default async function ContentPage({
-  params,
-}: Props) {
-  const {
-    category,
-    slug,
-  } = await params;
+export default async function ExplorePage({
+  searchParams,
+}: ExplorePageProps) {
+  const { page } = await searchParams;
 
-  const item =
-    await ContentRepository.getBySlug(
-      slug,
-    );
+  const items =
+    await ContentRepository.getAll();
 
-  if (!item) {
-    notFound();
-  }
+  /*
+   * Explore muestra todo el contenido
+   * excepto skins.
+   */
+  const explorerItems = items.filter(
+    (item) => item.category !== "skins",
+  );
 
-  if (item.category !== category) {
-    notFound();
-  }
+  const parsedPage = Number.parseInt(
+    page ?? "1",
+    10,
+  );
 
-  if (item.category === "skins") {
-    return (
-      <main>
-        <section className="py-20">
-          <Container>
-            <SkinHeader
-              item={
-                item as SkinItem
-              }
-            />
-          </Container>
-        </section>
-      </main>
-    );
-  }
+  const currentPage =
+    Number.isFinite(parsedPage) &&
+    parsedPage >= 1
+      ? parsedPage
+      : 1;
 
   return (
     <main>
-      <section className="py-16 lg:py-20">
+      <section className="py-20">
         <Container>
-          <div
-            className="
-              mx-auto
-              max-w-5xl
-              space-y-10
-            "
-          >
-            <ContentHeader
-              item={item}
+          <Heading>
+            Explore
+          </Heading>
+
+          <p className="mt-3 text-muted">
+            Explora mods, mapas, shaders,
+            texturas y más contenido de
+            FoxCraft.
+          </p>
+
+          <div className="mt-10">
+            <Explorer
+              items={explorerItems}
+              currentPage={currentPage}
             />
-
-            <ContentInfo
-              item={item}
-            />
-
-            <div
-              className="
-                rounded-2xl
-                border
-                border-border
-                bg-surface
-                p-6
-              "
-            >
-              <div
-                className="
-                  flex
-                  flex-col
-                  gap-5
-                  sm:flex-row
-                  sm:items-center
-                  sm:justify-between
-                "
-              >
-                <div>
-                  <h2
-                    className="
-                      font-heading
-                      text-xl
-                      font-semibold
-                    "
-                  >
-                    Descargar {item.title}
-                  </h2>
-
-                  <p
-                    className="
-                      mt-1
-                      text-sm
-                      text-muted
-                    "
-                  >
-                    Accede al enlace de
-                    descarga del contenido.
-                  </p>
-                </div>
-
-                <ContentActions
-                  download={item.download}
-                />
-              </div>
-            </div>
           </div>
         </Container>
       </section>
@@ -3295,119 +3260,115 @@ export function Navbar() {
 components/search/explorer.tsx
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 
-import {
-useState
-} from "react";
+import { ContentGrid } from "@/components/catalog";
+import { Pagination } from "@/components/catalog/pagination";
+import { EmptyState } from "@/components/ui";
 
-import {
-SearchBar
-} from "./search-bar";
+import { SearchBar } from "./search-bar";
 
-import {
-ContentGrid
-} from "@/components/catalog";
+import type { ContentItem } from "@/types";
 
-import {
-  EmptyState,
-} from "@/components/ui";
-
-import type {
-ContentItem
-} from "@/types";
-
-
-
-interface Props {
-
-items:ContentItem[];
-
+interface ExplorerProps {
+  items: ContentItem[];
+  currentPage: number;
 }
 
-
+const ITEMS_PER_PAGE = 24;
 
 export function Explorer({
-items
-}:Props){
+  items,
+  currentPage,
+}: ExplorerProps) {
+  const [results, setResults] =
+    useState(items);
 
+  /*
+   * Mantiene los resultados sincronizados
+   * con los datos recibidos del servidor.
+   */
+  useEffect(() => {
+    setResults(items);
+  }, [items]);
 
-const [
-results,
-setResults
-] =
-useState(items);
+  function handleSearch(value: string) {
+    const search =
+      value.toLowerCase().trim();
 
+    if (!search) {
+      setResults(items);
+      return;
+    }
 
+    const filtered = items.filter(
+      (item) => {
+        const title =
+          item.title.toLowerCase();
 
-function handleSearch(
-value:string
-){
+        const description =
+          item.description.toLowerCase();
 
+        return (
+          title.includes(search) ||
+          description.includes(search)
+        );
+      },
+    );
 
-if(!value){
+    setResults(filtered);
+  }
 
-setResults(items);
+  const totalPages = Math.max(
+    1,
+    Math.ceil(
+      results.length / ITEMS_PER_PAGE,
+    ),
+  );
 
-return;
+  /*
+   * Evita intentar mostrar una página
+   * que no existe.
+   */
+  const safePage = Math.min(
+    Math.max(currentPage, 1),
+    totalPages,
+  );
 
-}
+  const paginatedItems = useMemo(() => {
+    const start =
+      (safePage - 1) *
+      ITEMS_PER_PAGE;
 
+    const end =
+      start + ITEMS_PER_PAGE;
 
+    return results.slice(start, end);
+  }, [results, safePage]);
 
-const search =
-value.toLowerCase();
+  return (
+    <div className="space-y-10">
+      <SearchBar
+        onSearch={handleSearch}
+      />
 
+      {results.length > 0 ? (
+        <>
+          <ContentGrid
+            items={paginatedItems}
+          />
 
-
-setResults(
-
-items.filter(
-item =>
-
-item.title
-.toLowerCase()
-.includes(search)
-
-||
-
-item.description
-.toLowerCase()
-.includes(search)
-
-)
-
-);
-
-
-}
-
-
-
-return (
-
-<div
-className="
-space-y-10
-"
->
-
-
-<SearchBar
-onSearch={handleSearch}
-/>
-
-
-{results.length > 0 ? (
-  <ContentGrid items={results} />
-) : (
-  <EmptyState />
-)}
-
-
-</div>
-
-)
-
+          <Pagination
+            currentPage={safePage}
+            totalPages={totalPages}
+            basePath="/explore"
+          />
+        </>
+      ) : (
+        <EmptyState />
+      )}
+    </div>
+  );
 }
 ---
 index.tsx
@@ -3417,104 +3378,63 @@ export * from "./explorer";
 search-bar.tsx
 "use client";
 
-import {
-  Search
-} from "lucide-react";
+import { Search } from "lucide-react";
+import { useState } from "react";
 
-import {
-  useState
-} from "react";
+import { Input } from "@/components/ui";
 
-import {
-  Input,
-} from "@/components/ui";
-
-interface Props {
-
-onSearch(
- value:string
-):void;
-
+interface SearchBarProps {
+  onSearch: (value: string) => void;
 }
-
-
 
 export function SearchBar({
-onSearch
-}:Props){
+  onSearch,
+}: SearchBarProps) {
+  const [value, setValue] =
+    useState("");
 
+  function handleChange(
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) {
+    const text = event.target.value;
 
-const [value,setValue] =
-useState("");
+    setValue(text);
+    onSearch(text);
+  }
 
+  return (
+    <div className="relative w-full">
+      <Search
+        className="
+          absolute
+          left-4
+          top-1/2
+          -translate-y-1/2
+          text-muted
+        "
+        size={20}
+      />
 
-
-function handleChange(
-e:React.ChangeEvent<HTMLInputElement>
-){
-
-const text =
-e.target.value;
-
-
-setValue(text);
-
-onSearch(text);
-
-}
-
-
-
-return (
-
-<div
-className="
-relative
-w-full
-"
->
-
-<Search
-className="
-absolute
-left-4
-top-1/2
--translate-y-1/2
-text-muted
-"
-size={20}
-/>
-
-
-<Input
-
-value={value}
-
-onChange={handleChange}
-
-placeholder="Buscar mods, mapas, shaders..."
-
-className="
-h-12
-w-full
-rounded-xl
-border
-border-border
-bg-surface
-pl-12
-pr-4
-outline-none
-transition
-focus:border-primary
-"
-
-/>
-
-
-</div>
-
-)
-
+      <Input
+        value={value}
+        onChange={handleChange}
+        placeholder="Buscar mods, mapas, shaders..."
+        className="
+          h-12
+          w-full
+          rounded-xl
+          border
+          border-border
+          bg-surface
+          pl-12
+          pr-4
+          outline-none
+          transition
+          focus:border-primary
+        "
+      />
+    </div>
+  );
 }
 ---
 components/ui/badge.tsx
@@ -4747,6 +4667,292 @@ model Like {
 ---
 public/ (supongo que no te tengo que decir que tengo aca)
 
+---
+repositories/content.repository.ts (sin base)
+import {
+  mods,
+  maps,
+  skins,
+  shaders,
+  resourcePacks,
+  texturePacks,
+  uiPacks,
+  armorTrims,
+  banners,
+  schematicsJava,
+  schematicsBedrock,
+} from "@/data";
+
+import type {
+  ContentCategory,
+  ContentItem,
+  SkinItem,
+} from "@/types";
+
+import {
+  mapContent,
+  mapContents,
+} from "@/lib/content/mapper";
+
+import { prisma } from "@/lib/prisma";
+
+// ============================================================
+// STATIC CONTENT
+// ============================================================
+
+const staticContent: ContentItem[] = [
+  ...mods.map((item) => ({
+    ...item,
+    category: "mods" as const,
+  })),
+
+  ...maps.map((item) => ({
+    ...item,
+    category: "maps" as const,
+  })),
+
+  ...shaders.map((item) => ({
+    ...item,
+    category: "shaders" as const,
+  })),
+
+  ...resourcePacks.map((item) => ({
+    ...item,
+    category: "resource-packs" as const,
+  })),
+
+  ...texturePacks.map((item) => ({
+    ...item,
+    category: "texture-packs" as const,
+  })),
+
+  ...uiPacks.map((item) => ({
+    ...item,
+    category: "ui-packs" as const,
+  })),
+
+  ...skins.map((item) => ({
+    ...item,
+    category: "skins" as const,
+  })),
+
+  ...armorTrims.map((item) => ({
+    ...item,
+    category: "armor-trims" as const,
+  })),
+
+  ...banners.map((item) => ({
+    ...item,
+    category: "banners" as const,
+  })),
+
+  ...schematicsJava.map((item) => ({
+    ...item,
+    category: "schematics-java" as const,
+  })),
+
+  ...schematicsBedrock.map((item) => ({
+    ...item,
+    category: "schematics-bedrock" as const,
+  })),
+];
+
+// ============================================================
+// STATIC HELPERS
+// ============================================================
+
+function getStaticByCategory(
+  category: ContentCategory,
+): ContentItem[] {
+  return staticContent.filter(
+    (item) => item.category === category,
+  );
+}
+
+function getStaticByRoute(
+  category: ContentCategory,
+  id: number,
+  slug: string,
+): ContentItem | null {
+  return (
+    staticContent.find(
+      (item) =>
+        item.category === category &&
+        item.id === id &&
+        item.slug === slug,
+    ) ?? null
+  );
+}
+
+function getStaticBySlug(
+  slug: string,
+): ContentItem | null {
+  return (
+    staticContent.find(
+      (item) => item.slug === slug,
+    ) ?? null
+  );
+}
+
+// ============================================================
+// DATABASE HELPERS
+// ============================================================
+
+function databaseCategory(
+  category: ContentCategory,
+) {
+  return category.toUpperCase() as
+    | "MODS"
+    | "MAPS"
+    | "SHADERS"
+    | "RESOURCE_PACKS"
+    | "TEXTURE_PACKS"
+    | "UI_PACKS"
+    | "SKINS"
+    | "ARMOR_TRIMS"
+    | "BANNERS"
+    | "SCHEMATICS_JAVA"
+    | "SCHEMATICS_BEDROCK";
+}
+
+// ============================================================
+// REPOSITORY
+// ============================================================
+
+export const ContentRepository = {
+  // ==========================================================
+  // GET ALL
+  // ==========================================================
+
+async getAll(): Promise<ContentItem[]> {
+  return [...staticContent];
+},
+
+  // ==========================================================
+  // GET FEATURED
+  // ==========================================================
+
+async getFeatured(): Promise<ContentItem[]> {
+  return staticContent.filter(
+    (item) => item.featured,
+  );
+},
+
+  // ==========================================================
+  // GET LATEST
+  // ==========================================================
+
+async getLatest(
+  limit = 8,
+): Promise<ContentItem[]> {
+  return staticContent
+    .slice()
+    .sort(
+      (a, b) =>
+        b.createdAt.getTime() -
+        a.createdAt.getTime(),
+    )
+    .slice(0, limit);
+},
+
+  // ==========================================================
+  // GET BY ROUTE
+  //
+  // /[category]/[id]/[slug]
+  // ==========================================================
+
+async getByRoute(
+  category: ContentCategory,
+  id: number,
+  slug: string,
+): Promise<ContentItem | null> {
+  return getStaticByRoute(
+    category,
+    id,
+    slug,
+  );
+},
+
+  // ==========================================================
+  // GET BY SLUG
+  //
+  // Compatibilidad temporal.
+  //
+  // NO utilizar para las nuevas rutas.
+  // La ruta oficial ahora es:
+  //
+  // /[category]/[id]/[slug]
+  // ==========================================================
+
+async getBySlug(
+  slug: string,
+): Promise<ContentItem | null> {
+  return getStaticBySlug(slug);
+},
+
+  // ==========================================================
+  // GET BY CATEGORY
+  // ==========================================================
+
+async getByCategory(
+  category: ContentCategory,
+): Promise<ContentItem[]> {
+  return getStaticByCategory(category);
+},
+
+  // ==========================================================
+  // GET RELATED
+  // ==========================================================
+
+async getRelated(
+  category: ContentCategory,
+  slug: string,
+  limit = 4,
+): Promise<ContentItem[]> {
+  return getStaticByCategory(category)
+    .filter(
+      (item) => item.slug !== slug,
+    )
+    .slice(0, limit);
+},
+
+  // ==========================================================
+  // SEARCH
+  // ==========================================================
+
+async search(
+  query: string,
+): Promise<ContentItem[]> {
+  const value = query
+    .toLowerCase()
+    .trim();
+
+  if (!value) {
+    return this.getAll();
+  }
+
+  return staticContent.filter(
+    (item) =>
+      item.title
+        .toLowerCase()
+        .includes(value) ||
+      item.description
+        .toLowerCase()
+        .includes(value),
+  );
+},
+
+  // ==========================================================
+  // GET SKINS
+  // ==========================================================
+
+  async getSkins(): Promise<SkinItem[]> {
+    const items =
+      await this.getByCategory("skins");
+
+    return items as SkinItem[];
+  },
+};
 ---
 repositories/content.repository.ts
 import {

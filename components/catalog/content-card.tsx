@@ -28,11 +28,16 @@ export function ContentCard({
         hover:shadow-primary/10
       "
     >
-      <div className="relative aspect-[16/9] overflow-hidden">
+      <div className="relative aspect-video overflow-hidden">
         <Image
           src={item.image}
           alt={item.title}
           fill
+          sizes="
+            (max-width: 640px) 100vw,
+            (max-width: 1024px) 50vw,
+            25vw
+          "
           className="
             object-cover
             transition-transform
