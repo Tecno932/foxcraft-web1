@@ -5,6 +5,7 @@ import {
   Layers3,
 } from "lucide-react";
 
+import { formatNumber } from "@/lib/format-number";
 import type { SchematicItem } from "@/types";
 
 interface SchematicCardProps {
@@ -113,7 +114,7 @@ export function SchematicCard({
 
           <span>
             {item.blocks
-              ? `${item.blocks.toLocaleString()} bloques`
+              ? `${formatNumber(item.blocks)} bloques`
               : "Sin datos"}
           </span>
         </div>
@@ -122,7 +123,7 @@ export function SchematicCard({
           <Download size={15} />
 
           <span>
-            {item.downloads?.toLocaleString() ?? "0"}
+            {formatNumber(item.downloads)}
           </span>
         </div>
       </div>

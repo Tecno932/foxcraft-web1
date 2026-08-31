@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 
 import { Inter, Space_Grotesk } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
-import Script from "next/script";
 
 import "./globals.css";
 
 import { Navbar } from "@/components/navigation";
 import { Footer } from "@/components/layout";
+import { CookieProvider } from "@/components/cookies/cookie-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -39,24 +38,16 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
     >
-      <head>
-        <Script
-          src="https://nap5k.com/tag.min.js"
-          data-zone="11696463"
-          strategy="afterInteractive"
-        />
-      </head>
-
       <body className="flex min-h-screen flex-col">
-        <Navbar />
+        <CookieProvider>
+          <Navbar />
 
-        <main className="flex-1">
-          {children}
-        </main>
+          <main className="flex-1">
+            {children}
+          </main>
 
-        <Footer />
-
-        <Analytics />
+          <Footer />
+        </CookieProvider>
       </body>
     </html>
   );

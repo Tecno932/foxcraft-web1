@@ -12,9 +12,7 @@ interface ContentGridProps {
   items: ContentItem[];
 }
 
-export function ContentGrid({
-  items,
-}: ContentGridProps) {
+export function ContentGrid({ items }: ContentGridProps) {
   if (items.length === 0) {
     return (
       <div className="py-20 text-center">
