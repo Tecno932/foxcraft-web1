@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 
 import { Inter, Space_Grotesk } from "next/font/google";
-
 import { Analytics } from "@vercel/analytics/next";
+import Script from "next/script";
 
 import "./globals.css";
 
 import { Navbar } from "@/components/navigation";
-
 import { Footer } from "@/components/layout";
 
 const inter = Inter({
@@ -25,7 +24,6 @@ export const metadata: Metadata = {
     default: "FoxCraft",
     template: "%s | FoxCraft",
   },
-
   description:
     "Descubre los mejores Mods, Maps, Shaders, Resource Packs, Skins y mucho más para Minecraft.",
 };
@@ -41,6 +39,14 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
     >
+      <head>
+        <Script
+          src="https://nap5k.com/tag.min.js"
+          data-zone="11696463"
+          strategy="afterInteractive"
+        />
+      </head>
+
       <body className="flex min-h-screen flex-col">
         <Navbar />
 
