@@ -6,7 +6,7 @@ import "./globals.css";
 
 import { Navbar } from "@/components/navigation";
 import { Footer } from "@/components/layout";
-import { CookieProvider } from "@/components/cookies/cookie-provider";
+import { Providers } from "@/components/providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -39,7 +39,7 @@ export default function RootLayout({
       className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
     >
       <body className="flex min-h-screen flex-col">
-        <CookieProvider>
+        <Providers>
           <Navbar />
 
           <main className="flex-1">
@@ -47,7 +47,7 @@ export default function RootLayout({
           </main>
 
           <Footer />
-        </CookieProvider>
+        </Providers>
       </body>
     </html>
   );
