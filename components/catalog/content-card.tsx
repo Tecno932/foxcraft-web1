@@ -1,16 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-
 import type { ContentItem } from "@/types";
-import { formatNumber } from "@/lib/format-number";
 
 interface ContentCardProps {
   item: ContentItem;
 }
 
-export function ContentCard({
-  item,
-}: ContentCardProps) {
+export function ContentCard({ item }: ContentCardProps) {
   return (
     <Link
       href={`/${item.category}/${item.id}/${item.slug}`}
@@ -29,7 +25,28 @@ export function ContentCard({
         hover:shadow-primary/10
       "
     >
-      <div className="relative aspect-video overflow-hidden">
+      {/* Imagen */}
+      <div className="relative aspect-video overflow-hidden bg-black">
+        {/* Fondo desenfocado */}
+        <Image
+          src={item.image}
+          alt=""
+          fill
+          sizes="
+            (max-width: 640px) 100vw,
+            (max-width: 1024px) 50vw,
+            25vw
+          "
+          className="
+            scale-110
+            object-cover
+            blur-2xl
+            opacity-70
+          "
+          aria-hidden="true"
+        />
+
+        {/* Imagen original completa */}
         <Image
           src={item.image}
           alt={item.title}
@@ -40,15 +57,17 @@ export function ContentCard({
             25vw
           "
           className="
-            object-cover
+            object-contain
             transition-transform
             duration-500
             group-hover:scale-105
           "
         />
 
+        {/* Degradado inferior */}
         <div
           className="
+            pointer-events-none
             absolute
             inset-0
             bg-gradient-to-t
@@ -58,6 +77,7 @@ export function ContentCard({
           "
         />
 
+        {/* Plataforma */}
         {item.platform && (
           <span
             className="
@@ -79,6 +99,7 @@ export function ContentCard({
         )}
       </div>
 
+      {/* Información */}
       <div className="p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
@@ -125,7 +146,7 @@ export function ContentCard({
 
         {item.downloads !== undefined && (
           <div className="mt-4 text-xs text-muted">
-            {formatNumber(item.downloads)} descargas
+            {item.downloads.toLocaleString()} descargas
           </div>
         )}
       </div>

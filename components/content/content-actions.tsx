@@ -62,7 +62,6 @@ export function ContentActions({
   const handleFinalDownload = () => {
 
     if (!download) {
-      console.error("[FoxCraft] ERROR: URL de descarga vacía");
       return;
     }
   };
