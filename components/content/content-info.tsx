@@ -5,9 +5,8 @@ import {
   User,
 } from "lucide-react";
 
-import type {
-  ContentItem,
-} from "@/types";
+import type { ContentItem } from "@/types";
+import { formatNumber } from "@/lib/format-number";
 
 interface Props {
   item: ContentItem;
@@ -68,8 +67,8 @@ export function ContentInfo({
       <InfoItem
         icon={<Download size={18} />}
         label="Descargas"
-        value={item.downloads.toLocaleString(
-          "es-AR",
+        value={formatNumber(
+          item.downloads,
         )}
       />
 

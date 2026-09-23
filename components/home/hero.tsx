@@ -25,8 +25,8 @@ export function Hero() {
       className="
       relative
       overflow-hidden
-      py-24
-      lg:py-36
+      py-6
+      lg:py-6
       "
     >
       <Container>

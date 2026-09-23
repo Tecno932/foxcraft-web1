@@ -10,6 +10,7 @@ import {
   ContentHeader,
   ContentInfo,
   ContentActions,
+  RelatedContent,
 } from "@/components/content";
 
 import {
@@ -115,7 +116,7 @@ export default async function ContentPage({
   if (item.category === "skins") {
     return (
       <main>
-        <section className="py-20">
+        <section className="py-2">
           <Container>
             <SkinHeader
               item={item as SkinItem}
@@ -125,6 +126,17 @@ export default async function ContentPage({
       </main>
     );
   }
+
+  // ==========================================================
+  // RELATED CONTENT
+  // ==========================================================
+
+  const relatedContent =
+    await ContentRepository.getRelated(
+      item.category,
+      item.slug,
+      4,
+    );
 
   // ==========================================================
   // DEFAULT CONTENT
@@ -161,6 +173,10 @@ export default async function ContentPage({
                 />
               </div>
             </div>
+
+            <RelatedContent
+              items={relatedContent}
+            />
           </div>
         </Container>
       </section>

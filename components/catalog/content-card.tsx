@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ContentItem } from "@/types";
+import { formatNumber } from "@/lib/format-number";
 
 interface ContentCardProps {
   item: ContentItem;
@@ -146,7 +147,7 @@ export function ContentCard({ item }: ContentCardProps) {
 
         {item.downloads !== undefined && (
           <div className="mt-4 text-xs text-muted">
-            {item.downloads.toLocaleString()} descargas
+            {formatNumber(item.downloads)} descargas
           </div>
         )}
       </div>

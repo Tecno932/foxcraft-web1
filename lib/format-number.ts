@@ -5,5 +5,5 @@ export function formatNumber(
     return "0";
   }
 
-  return new Intl.NumberFormat().format(value);
+  return new Intl.NumberFormat("es-AR").format(value);
 }

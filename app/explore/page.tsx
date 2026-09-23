@@ -42,7 +42,7 @@ export default async function ExplorePage({
 
   return (
     <main>
-      <section className="py-20">
+      <section className="py-2">
         <Container>
           <Heading>
             Explore
