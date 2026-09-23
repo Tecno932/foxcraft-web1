@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { Check, X } from "lucide-react";
-
 import { useCookieConsent } from "@/components/cookies/cookie-consent";
 
 interface CookiePreferencesProps {
@@ -17,7 +16,6 @@ export function CookiePreferences({
   const { consent, savePreferences } = useCookieConsent();
 
   const [analytics, setAnalytics] = useState(false);
-  const [ads, setAds] = useState(false);
 
   useEffect(() => {
     if (!open) {
@@ -25,7 +23,6 @@ export function CookiePreferences({
     }
 
     setAnalytics(consent?.analytics === true);
-    setAds(consent?.ads === true);
   }, [open, consent]);
 
   if (!open) {
@@ -35,7 +32,6 @@ export function CookiePreferences({
   const handleSave = () => {
     savePreferences({
       analytics,
-      ads,
     });
 
     onClose();
@@ -81,7 +77,7 @@ export function CookiePreferences({
             </h2>
 
             <p className="mt-1 text-sm text-muted">
-              Elige qué categorías opcionales quieres permitir.
+              Configurá las categorías opcionales de FoxCraft.
             </p>
           </div>
 
@@ -117,9 +113,9 @@ export function CookiePreferences({
 
           <PreferenceRow
             title="Publicidad"
-            description="Permite cargar servicios publicitarios y mostrar anuncios."
-            enabled={ads}
-            onChange={setAds}
+            description="Necesaria para habilitar las descargas y cargar los servicios publicitarios."
+            enabled
+            disabled
           />
         </div>
 
@@ -183,7 +179,9 @@ function PreferenceRow({
     >
       <div className="min-w-0">
         <div className="flex items-center gap-2">
-          <h3 className="text-sm font-semibold">{title}</h3>
+          <h3 className="text-sm font-semibold">
+            {title}
+          </h3>
 
           {disabled && (
             <span className="rounded-full bg-surface-secondary px-2 py-0.5 text-[10px] font-medium text-muted">
@@ -201,7 +199,9 @@ function PreferenceRow({
         type="button"
         role="switch"
         aria-checked={enabled}
-        aria-label={`${title}: ${enabled ? "activado" : "desactivado"}`}
+        aria-label={`${title}: ${
+          enabled ? "activado" : "desactivado"
+        }`}
         disabled={disabled}
         onClick={() => onChange?.(!enabled)}
         className={`
@@ -212,7 +212,11 @@ function PreferenceRow({
               ? "bg-primary"
               : "bg-surface-secondary"
           }
-          ${disabled ? "cursor-not-allowed opacity-80" : "cursor-pointer"}
+          ${
+            disabled
+              ? "cursor-not-allowed opacity-80"
+              : "cursor-pointer"
+          }
         `}
       >
         <span
@@ -220,11 +224,18 @@ function PreferenceRow({
             flex h-5 w-5 items-center justify-center rounded-full
             bg-white shadow-sm
             transition-transform
-            ${enabled ? "translate-x-6" : "translate-x-1"}
+            ${
+              enabled
+                ? "translate-x-6"
+                : "translate-x-1"
+            }
           `}
         >
           {enabled && (
-            <Check size={12} className="text-primary" />
+            <Check
+              size={12}
+              className="text-primary"
+            />
           )}
         </span>
       </button>

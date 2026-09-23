@@ -2,13 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-
-import {
-  Download,
-  ArrowUpRight,
-  Clock,
-} from "lucide-react";
-
+import { Download, ArrowUpRight, Clock } from "lucide-react";
 import Script from "next/script";
 import { Button } from "@/components/ui";
 import { useCookieConsent } from "@/components/cookies/cookie-consent";
@@ -17,22 +11,12 @@ interface Props {
   download: string;
 }
 
-export function ContentActions({
-  download,
-}: Props) {
+export function ContentActions({ download }: Props) {
   const [countdown, setCountdown] = useState<number | null>(null);
+  const { consent } = useCookieConsent();
 
   useEffect(() => {
-    return () => {
-    };
-  }, [download]);
-
-  useEffect(() => {
-    if (countdown === null) {
-      return;
-    }
-
-    if (countdown === 0) {
+    if (countdown === null || countdown === 0) {
       return;
     }
 
@@ -50,36 +34,25 @@ export function ContentActions({
   }, [countdown]);
 
   const handlePrepareDownload = () => {
-    if (countdown !== null) {
+    if (countdown !== null || !download) {
       return;
     }
 
     setCountdown(5);
   };
 
-  const { consent } = useCookieConsent();
-
-  const handleFinalDownload = () => {
-
-    if (!download) {
-      return;
-    }
-  };
-
   const isReady = countdown === 0;
 
   return (
     <>
-      {consent?.ads && (
-        <Script
-          src="https://al5sm.com/tag.min.js"
-          data-zone="11696491"
-          strategy="afterInteractive"
-          onError={(error) => {
-            console.error("[Monetag] Error cargando script:", error);
-          }}
-        />
-      )}
+      <Script
+        src="https://al5sm.com/tag.min.js"
+        data-zone="11696491"
+        strategy="afterInteractive"
+        onError={(error) => {
+          console.error("[Monetag] Error cargando script:", error);
+        }}
+      />
 
       <div className="flex flex-wrap gap-3">
         {!isReady ? (
@@ -101,15 +74,11 @@ export function ContentActions({
             )}
           </Button>
         ) : (
-          <Button
-            asChild
-            size="lg"
-          >
+          <Button asChild size="lg">
             <a
               href={download}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={handleFinalDownload}
             >
               <Download size={18} />
               Descargar ahora
@@ -117,11 +86,7 @@ export function ContentActions({
           </Button>
         )}
 
-        <Button
-          asChild
-          variant="secondary"
-          size="lg"
-        >
+        <Button asChild variant="secondary" size="lg">
           <Link href="/explore">
             <ArrowUpRight size={18} />
             Explorar más
@@ -131,4 +96,3 @@ export function ContentActions({
     </>
   );
 }
-

@@ -2,14 +2,11 @@
 
 import { useEffect, useRef } from "react";
 
-import { useCookieConsent } from "@/components/cookies/cookie-consent";
-
 export function CatalogAd() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { consent } = useCookieConsent();
 
   useEffect(() => {
-    if (!consent?.ads || !containerRef.current) {
+    if (!containerRef.current) {
       return;
     }
 
@@ -23,11 +20,7 @@ export function CatalogAd() {
     return () => {
       script.remove();
     };
-  }, [consent?.ads]);
-
-  if (!consent?.ads) {
-    return null;
-  }
+  }, []);
 
   return (
     <div
