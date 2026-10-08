@@ -33,37 +33,22 @@ export function ContentCard({ item }: ContentCardProps) {
           src={item.image}
           alt=""
           fill
-          sizes="
-            (max-width: 640px) 100vw,
-            (max-width: 1024px) 50vw,
-            25vw
-          "
-          className="
-            scale-110
-            object-cover
-            blur-2xl
-            opacity-70
-          "
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          className="scale-110 object-cover blur-2xl opacity-70"
           aria-hidden="true"
         />
 
-        {/* Imagen original completa */}
-        <Image
-          src={item.image}
-          alt={item.title}
-          fill
-          sizes="
-            (max-width: 640px) 100vw,
-            (max-width: 1024px) 50vw,
-            25vw
-          "
-          className="
-            object-contain
-            transition-transform
-            duration-500
-            group-hover:scale-105
-          "
-        />
+        {/* Imagen principal */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Image
+            src={item.image}
+            alt={item.title}
+            width={512}
+            height={512}
+            sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 22vw"
+            className="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
 
         {/* Degradado inferior */}
         <div

@@ -48,9 +48,8 @@ export function ContentHeader({
           alt={item.title}
           fill
           priority
-          className="
-            object-cover
-          "
+          sizes="(max-width: 768px) 100vw, 1200px"
+          className="object-contain"
         />
       </div>
 
