@@ -38,50 +38,42 @@ export function Navbar() {
     setDesktopDonationOpen(false);
   };
 
-  const [supabase] = useState(() => createClient());
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    const supabase = createClient();
     let mounted = true;
 
-    supabase.auth.getUser().then(({ data }) => {
+    const checkSession = async () => {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
       if (mounted) {
-        setIsLoggedIn(Boolean(data.user));
+        setIsLoggedIn(!error && !!user);
       }
-    });
+    };
+
+    void checkSession();
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsLoggedIn(Boolean(session?.user));
+      if (mounted) {
+        setIsLoggedIn(!!session?.user);
+      }
     });
 
     return () => {
       mounted = false;
       subscription.unsubscribe();
     };
-  }, [supabase]);
+  }, []);
 
   const profileHref = isLoggedIn ? "/account" : "/login";
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setMobileOpen(false);
-        setDonationsOpen(false);
-        setDesktopDonationOpen(false);
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener(
-        "keydown",
-        handleKeyDown,
-      );
-    };
-  }, []);
 
   useEffect(() => {
     if (mobileOpen || desktopDonationOpen) {
