@@ -74,7 +74,6 @@ export function Navbar() {
 
   const profileHref = isLoggedIn ? "/account" : "/login";
 
-
   useEffect(() => {
     if (mobileOpen || desktopDonationOpen) {
       document.body.style.overflow = "hidden";
