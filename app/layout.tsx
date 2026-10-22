@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 
 import "./globals.css";
+import "./auth.css";;
 
 import { Navbar } from "@/components/navigation";
 import { Footer } from "@/components/layout";

@@ -9,7 +9,11 @@ import {
   Menu,
   Sparkles,
   X,
+  UserRound,
+  Crown,
 } from "lucide-react";
+
+import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 
 import { Button, Container } from "@/components/ui";
@@ -33,6 +37,32 @@ export function Navbar() {
   const closeDesktopDonation = () => {
     setDesktopDonationOpen(false);
   };
+
+  const [supabase] = useState(() => createClient());
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+
+    supabase.auth.getUser().then(({ data }) => {
+      if (mounted) {
+        setIsLoggedIn(Boolean(data.user));
+      }
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(Boolean(session?.user));
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, [supabase]);
+
+  const profileHref = isLoggedIn ? "/account" : "/login";
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -185,36 +215,94 @@ export function Navbar() {
                   Explorar
                 </Link>
               </Button>
+
+<Link
+  href={profileHref}
+  aria-label={isLoggedIn ? "Ir a mi perfil" : "Iniciar sesión"}
+  className="
+    group
+    flex
+    h-10
+    items-center
+    gap-2
+    rounded-xl
+    border
+    border-border/70
+    bg-surface/60
+    px-3
+    text-sm
+    font-medium
+    text-muted
+    transition-all
+    duration-200
+    hover:border-border
+    hover:bg-surface-secondary
+    hover:text-foreground
+  "
+>
+  <UserRound
+    size={17}
+    className="transition-transform duration-200 group-hover:scale-105"
+  />
+
+  <span>{isLoggedIn ? "Perfil" : "Login"}</span>
+</Link>
             </div>
 
             {/* ================================================== */}
             {/* MOBILE MENU BUTTON */}
             {/* ================================================== */}
 
-            <div className="md:hidden">
-              <Button
-                variant="ghost"
-                size="icon"
-                type="button"
-                aria-label={
-                  mobileOpen
-                    ? "Cerrar menú"
-                    : "Abrir menú"
-                }
-                aria-expanded={mobileOpen}
-                onClick={() => {
-                  setMobileOpen(true);
-                  setDonationsOpen(false);
-                }}
-                className="
-                  h-10
-                  w-10
-                  rounded-xl
-                "
-              >
-                <Menu size={22} />
-              </Button>
-            </div>
+<div className="flex items-center gap-2 md:hidden">
+  {/* PREMIUM - BOTÓN MÓVIL */}
+  <Link
+    href={isLoggedIn ? "/premium" : "/login?next=/premium"}
+    onClick={closeMobileMenu}
+    aria-label="FoxCrafting Premium"
+    className="
+      group
+      flex
+      h-10
+      items-center
+      gap-1.5
+      rounded-xl
+      border
+      border-primary/20
+      bg-primary/5
+      px-3
+      text-sm
+      font-semibold
+      text-primary
+      transition-all
+      hover:border-primary/40
+      hover:bg-primary/10
+    "
+  >
+    <Crown
+      size={16}
+      className="transition-transform duration-200 group-hover:-rotate-6"
+    />
+    <span>Premium</span>
+  </Link>
+
+
+  {/* HAMBURGUESA */}
+  <Button
+    variant="ghost"
+    size="icon"
+    type="button"
+    aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
+    aria-expanded={mobileOpen}
+    onClick={() => {
+      setMobileOpen((value) => !value);
+      setDonationsOpen(false);
+    }}
+    className="h-10 w-10 rounded-xl"
+  >
+    {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+  </Button>
+</div>
+
           </div>
         </Container>
       </header>
@@ -688,6 +776,26 @@ export function Navbar() {
               >
                 Textures
               </Link>
+
+<Link
+  href={profileHref}
+  onClick={closeMobileMenu}
+  className="
+    flex
+    items-center
+    gap-3
+    rounded-xl
+    px-4
+    py-3
+    text-sm
+    font-medium
+    transition
+    hover:bg-surface-secondary
+  "
+>
+  <UserRound size={17} className="text-muted" />
+  Perfil
+</Link>
 
               {/* DONACIONES */}
 
