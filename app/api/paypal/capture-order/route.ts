@@ -175,25 +175,24 @@ export async function POST(request: Request) {
 
     const valid = Object.values(checks).every(Boolean);
 
-    if (!valid || !capture) {
-      console.error("PayPal payment validation failed", {
-        orderID,
-        orderStatus: result.status,
-        captureStatus: capture?.status,
+if (!valid || !capture) {
+  return NextResponse.json(
+    {
+      error: "El pago no pudo verificarse.",
+      diagnostic: {
         checks,
+        orderStatus: result.status,
+        captureStatus: capture?.status ?? null,
         expectedAmount,
-        orderAmount: unit?.amount?.value,
-        orderCurrency: unit?.amount?.currency_code,
-        captureAmount: capture?.amount?.value,
-        captureCurrency: capture?.amount?.currency_code,
-        customIdPresent: typeof unit?.custom_id === "string",
-      });
-
-      return NextResponse.json(
-        { error: "El pago no pudo verificarse." },
-        { status: 402 }
-      );
-    }
+        orderAmount: unit?.amount?.value ?? null,
+        orderCurrency: unit?.amount?.currency_code ?? null,
+        captureAmount: capture?.amount?.value ?? null,
+        captureCurrency: capture?.amount?.currency_code ?? null,
+      },
+    },
+    { status: 402 }
+  );
+}
 
     const { data: activated, error: activationError } =
       await admin.rpc("activate_premium_payment", {
