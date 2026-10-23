@@ -110,15 +110,18 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!isPremiumPlan(payment.plan)) {
-      console.error("Invalid plan stored for payment", orderID);
+    const plan = payment.plan;
+
+    if (!isPremiumPlan(plan)) {
+      console.error("Invalid plan stored for payment", { orderID });
+
       return NextResponse.json(
         { error: "El plan del pedido no es válido." },
         { status: 500 }
       );
     }
 
-    const expectedPlan = PLANS[payment.plan];
+    const expectedPlan = PLANS[plan as keyof typeof PLANS];
     const expectedAmount = expectedPlan.amount;
 
     // Verificar que la base de datos coincida con los precios del servidor.
@@ -153,23 +156,37 @@ export async function POST(request: Request) {
     const unit = result.purchase_units?.[0];
     const capture = unit?.payments?.captures?.[0];
 
-    const valid =
-      result.id === orderID &&
-      result.status === "COMPLETED" &&
-      unit?.custom_id === user.id &&
-      unit?.amount?.currency_code === "USD" &&
-      unit?.amount?.value === expectedAmount &&
-      typeof capture?.id === "string" &&
-      capture.id.length > 0 &&
-      capture.status === "COMPLETED" &&
-      capture.amount?.currency_code === "USD" &&
-      capture.amount?.value === expectedAmount;
+    const checks = {
+      orderId: result.id === orderID,
+      orderCompleted: result.status === "COMPLETED",
+      customIdMatchesUser: unit?.custom_id === user.id,
+      orderCurrencyUSD: unit?.amount?.currency_code === "USD",
+      orderAmountMatches:
+        unit?.amount?.value === expectedAmount,
+      captureIdPresent:
+        typeof capture?.id === "string" &&
+        capture.id.length > 0,
+      captureCompleted: capture?.status === "COMPLETED",
+      captureCurrencyUSD:
+        capture?.amount?.currency_code === "USD",
+      captureAmountMatches:
+        capture?.amount?.value === expectedAmount,
+    };
+
+    const valid = Object.values(checks).every(Boolean);
 
     if (!valid || !capture) {
       console.error("PayPal payment validation failed", {
         orderID,
         orderStatus: result.status,
         captureStatus: capture?.status,
+        checks,
+        expectedAmount,
+        orderAmount: unit?.amount?.value,
+        orderCurrency: unit?.amount?.currency_code,
+        captureAmount: capture?.amount?.value,
+        captureCurrency: capture?.amount?.currency_code,
+        customIdPresent: typeof unit?.custom_id === "string",
       });
 
       return NextResponse.json(
