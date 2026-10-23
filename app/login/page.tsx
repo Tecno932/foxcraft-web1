@@ -64,13 +64,6 @@ export default function LoginPage() {
   return (
     <main className="auth-page">
       <section className="auth-card">
-        <div className="auth-brand">
-          <span className="auth-brand-mark" aria-hidden="true">
-            F
-          </span>
-          FOXCRAFTING
-        </div>
-
         <h1>Bienvenido de nuevo</h1>
         <p className="auth-description">
           Iniciá sesión para acceder a tu perfil y tus favoritos.
@@ -82,7 +75,7 @@ export default function LoginPage() {
             id="email"
             type="email"
             autoComplete="email"
-            placeholder="vos@ejemplo.com"
+            placeholder="tuemail@gmail.com"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}

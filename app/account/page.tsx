@@ -29,13 +29,8 @@ export default async function AccountPage() {
   }
 
   if (!profile) {
-    return (
-      <main>
-        <h1>Mi cuenta de Foxcrafting</h1>
-        <p>Tu perfil todavía no está disponible.</p>
-        <p>Probá cerrar sesión y volver a ingresar.</p>
-      </main>
-    );
+    await supabase.auth.signOut();
+    redirect("/login");
   }
 
   // Obtener únicamente los favoritos del usuario actual.

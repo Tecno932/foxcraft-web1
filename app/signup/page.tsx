@@ -82,13 +82,6 @@ export default function SignupPage() {
   return (
     <main className="auth-page">
       <section className="auth-card">
-        <div className="auth-brand">
-          <span className="auth-brand-mark" aria-hidden="true">
-            F
-          </span>
-          FOXCRAFTING
-        </div>
-
         <h1>Crear cuenta</h1>
         <p className="auth-description">
           Registrate para guardar tus favoritos y tener tu espacio personal
@@ -101,7 +94,7 @@ export default function SignupPage() {
             id="email"
             type="email"
             autoComplete="email"
-            placeholder="vos@ejemplo.com"
+            placeholder="tuemail@gmail.com"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
